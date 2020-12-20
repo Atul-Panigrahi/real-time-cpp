@@ -32,7 +32,7 @@
       private:
         static value_type get_time_elapsed();
 
-        friend std::chrono::high_resolution_clock::time_point std::chrono::high_resolution_clock::now();
+        friend std::chrono::high_resolution_clock::time_point std::chrono::high_resolution_clock::now() noexcept;
 
         template<typename unsigned_tick_type>
         friend class util::timer;

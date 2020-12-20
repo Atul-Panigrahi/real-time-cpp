@@ -9,11 +9,12 @@
 # compiler flags for the target architecture
 # ------------------------------------------------------------------------------
 
-GCC_VERSION   = 4.8.3
+GCC_VERSION   = 9.3.1
 GCC_TARGET    = arm-none-eabi
 
+TGT_STL_DIR   = STL
+
 TGT_CFLAGS    = -mcpu=cortex-a8                                \
-                -march=armv7-a                                 \
                 -mtune=cortex-a8                               \
                 -marm                                          \
                 -mfloat-abi=hard                               \
@@ -26,6 +27,7 @@ TGT_CFLAGS    = -mcpu=cortex-a8                                \
 
 TGT_CPPFLAGS  = -std=c++11                                     \
                 -Wzero-as-null-pointer-constant                \
+                -I$(PATH_APP)/util/$(TGT_STL_DIR)              \
                 -I$(PATH_APP)/util/STL_C++14_Compatibility
 
 TGT_AFLAGS    =
