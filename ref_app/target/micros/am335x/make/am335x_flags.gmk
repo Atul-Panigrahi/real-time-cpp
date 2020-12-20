@@ -14,12 +14,12 @@ GCC_TARGET    = arm-none-eabi
 
 TGT_STL_DIR   = STL
 
-TGT_CFLAGS    = -march=armv7-a                                 \
+TGT_CFLAGS    = -mcpu=cortex-a8                                \
+                -mtune=cortex-a8                               \
                 -marm                                          \
                 -mfloat-abi=hard                               \
                 -mfpu=neon                                     \
                 -ffast-math                                    \
-                -ftree-vectorize                               \
                 -mno-unaligned-access                          \
                 -mno-long-calls
 
