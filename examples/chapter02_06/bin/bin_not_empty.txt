@@ -1,0 +1,4 @@
+bin_not_empty.txt
+This file is included to force Git to have bin directory.
+Without this file the directory would not exist in the repository.
+This is because Git does not include empty directories in repositories.
