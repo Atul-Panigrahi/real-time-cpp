@@ -379,9 +379,6 @@
     <ClCompile Include="src\mcal\stm32f429\mcal_wdg.cpp">
       <Filter>src\mcal\stm32f429</Filter>
     </ClCompile>
-    <ClCompile Include="src\mcal\am335x\mcal_cpu_detail.cpp">
-      <Filter>src\mcal\am335x</Filter>
-    </ClCompile>
     <ClCompile Include="src\app\benchmark\app_benchmark.cpp">
       <Filter>src\app\benchmark</Filter>
     </ClCompile>
@@ -971,9 +968,6 @@
     </ClInclude>
     <ClInclude Include="src\mcal\stm32f429\mcal_wdg.h">
       <Filter>src\mcal\stm32f429</Filter>
-    </ClInclude>
-    <ClInclude Include="src\mcal\am335x\mcal_cpu_detail.h">
-      <Filter>src\mcal\am335x</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

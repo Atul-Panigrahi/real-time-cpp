@@ -5,38 +5,30 @@
 //  or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#include <algorithm>
-#include <cstdint>
 #include <mcal_cpu.h>
-#include <mcal_cpu_detail.h>
 #include <mcal_osc.h>
 #include <mcal_port.h>
 #include <mcal_reg_access.h>
 #include <mcal_wdg.h>
 
+void init_interrupts_nmi();
+
 void mcal::cpu::init()
 {
-  detail::initialize_the_neon_coprocessor_and_the_vfp();
+  // Initialize the NEON coprocessor and the VFP.
+  asm volatile("mrc p15, #0, r3, c1, c0, #2"); // Read the cpacr.
+  asm volatile("orr r3, r3, #0x00F00000");     // Enable the FPU via setting cp10 and cp11.
+  asm volatile("mcr p15, #0, r3, c1, c0, #2"); // Write the cpacr.
+  asm volatile("isb");                         // Perform an instruction memory barrier (IMB/ISB) sequence .
 
-  detail::invalidate_the_caches();
+  // Enable the NEON coprocessor and the VFP.
+  asm volatile("mov r0, #0x40000000");
+  asm volatile("vmsr fpexc, r0");              // Enable the floating-point exception register.
+  asm volatile("vmrs r1, fpsid");
+  asm volatile("isb");                         // Perform an instruction memory barrier (IMB/ISB) sequence .
 
-  detail::clear_the_branch_prediction_array();
-
-  detail::invalidate_the_tlb();
-
-  detail::setup_the_domain_access_control();
-
-  detail::fill_the_tlb();
-
-  detail::set_the_tlb_base_address();
-
-  detail::enable_the_mmu();
-
-  detail::enable_branch_prediction();
-
-  detail::enable_the_caches();
-
-  detail::load_the_address_of_the_nmi_interrupt_table();
+  // Copy the system interrupt vector table from ROM to RAM.
+  init_interrupts_nmi();
 
   // Disable OPP50 operation and enable OPP100 operation.
   // Use the ratio for 24MHz to 32KHz division.
@@ -46,12 +38,7 @@ void mcal::cpu::init()
                     mcal::reg::control::clk32kdivratio_ctrl,
                     UINT32_C(0x00000000)>::reg_set();
 
-  mcal::wdg::init (nullptr);
+  mcal::wdg::init(nullptr);
   mcal::port::init(nullptr);
-  mcal::osc::init (nullptr);
-}
-
-void mcal::cpu::init2()
-{
-  detail::switch_to_user_mode();
+  mcal::osc::init(nullptr);
 }
