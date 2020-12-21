@@ -181,6 +181,19 @@ all: clean_prj version $(APP)_flash.hex $(APP)_nm.txt $(APP).elf
 rebuild: clean_all all
 
 
+FILES_BIN = $(PATH_BIN)/MLO                         \
+            $(PATH_BIN)/ref_app.bin                 \
+            $(PATH_BIN)/ref_app.elf                 \
+            $(PATH_BIN)/ref_app.hex                 \
+            $(PATH_BIN)/ref_app.lss                 \
+            $(PATH_BIN)/ref_app.map                 \
+            $(PATH_BIN)/ref_app_cppfilt.txt         \
+            $(PATH_BIN)/ref_app_flash.bin           \
+            $(PATH_BIN)/ref_app_flash.hex           \
+            $(PATH_BIN)/ref_app_nm.txt              \
+            $(PATH_BIN)/ref_app_readelf.txt         \
+            $(PATH_BIN)/ref_app_size.txt
+
 # ------------------------------------------------------------------------------
 # clean project
 # ------------------------------------------------------------------------------
@@ -191,8 +204,8 @@ clean_prj:
 	@-$(MKDIR) -p $(PATH_OBJ)
 	@-$(MKDIR) -p $(PATH_ERR)
 	@-$(MKDIR) -p $(PATH_SRC)
-	@-$(RM) -r $(PATH_BIN)   > NUL  2> NUL
 	@-$(MKDIR) -p $(PATH_BIN)
+	@-$(RM) -f $(FILES_BIN)   > NUL  2> NUL
 
 
 # ------------------------------------------------------------------------------
@@ -205,12 +218,11 @@ clean_all:
 	@-$(MKDIR) -p $(PATH_OBJ)
 	@-$(MKDIR) -p $(PATH_ERR)
 	@-$(MKDIR) -p $(PATH_SRC)
-	@-$(RM) -r $(PATH_OBJ)   > NUL  2> NUL
-	@-$(RM) -r $(PATH_ERR)   > NUL  2> NUL
-	@-$(RM) -r $(PATH_SRC)   > NUL  2> NUL
-	@-$(RM) -r $(PATH_BIN)   > NUL  2> NUL
 	@-$(MKDIR) -p $(PATH_BIN)
-
+	@-$(RM) -rf $(PATH_OBJ)   > NUL  2> NUL
+	@-$(RM) -rf $(PATH_ERR)   > NUL  2> NUL
+	@-$(RM) -rf $(PATH_SRC)   > NUL  2> NUL
+	@-$(RM) -f $(FILES_BIN)   > NUL  2> NUL
 
 # ------------------------------------------------------------------------------
 # print the GNUmake version and the compiler version

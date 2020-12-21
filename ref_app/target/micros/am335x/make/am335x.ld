@@ -26,14 +26,31 @@ _ram_begin = 0x402F8000;
 _stack_begin = 0x402FA000;
 _stack_end   = 0x402FC000;
 
+/* Set up the various stacks with total size of 12K. */
+
+__SYS_STACK_SIZE = 0x2800;
+__SVC_STACK_SIZE = 0x0200;
+__ABT_STACK_SIZE = 0x0100;
+__UND_STACK_SIZE = 0x0100;
+__IRQ_STACK_SIZE = 0x0200;
+__FIQ_STACK_SIZE = 0x0200;
+
 /* The end of the stack */
-__initial_stack_pointer = 0x402FC000;
+__initial_stack_pointer = 0x402FFFFC;
+
+/* Set up the memory regions. */
 
 MEMORY
 {
-  ROM(rx)  : ORIGIN = 0x402F0400, LENGTH = 0x7C00 - 4
-  RAM(rwx) : ORIGIN = 0x402F8000, LENGTH = 0x1000
-}
+  ROM(rx)     : ORIGIN = 0x402F0400, LENGTH = 0x7C00
+  RAM(rwx)    : ORIGIN = 0x402F8000, LENGTH = 0x1000
+  STACKS(rwx) : ORIGIN = 0x402F9000, LENGTH =   __SYS_STACK_SIZE
+                                              + __SVC_STACK_SIZE
+                                              + __ABT_STACK_SIZE
+                                              + __UND_STACK_SIZE
+                                              + __IRQ_STACK_SIZE
+                                              + __FIQ_STACK_SIZE
+ }
 
 SECTIONS
 {
@@ -51,6 +68,7 @@ SECTIONS
   /* Non-maskable ISR vectors */
   .isr_vector_nmi :
   {
+    PROVIDE(__INTVECT_BASE_ADDRESS = .) ;
     *(.isr_vector_nmi)
     . = ALIGN(0x10);
     KEEP(*(.isr_vector_nmi))
@@ -115,6 +133,51 @@ SECTIONS
     KEEP (*(.bss*))
     _bss_end = .;
   } > RAM
+
+  . = 0x402F9000;
+  . = ALIGN(4);
+
+  /* user-system mode stack definition */
+  .stack_sys :
+  {
+    . = ALIGN(MAX(__SYS_STACK_SIZE , .), 8);
+    PROVIDE(__SYS_STACK_TOP = .) ;
+  } > STACKS
+
+  /* Supervisor mode stack definition */
+  .stack_svc :
+  {
+    . = ALIGN(MAX(__SVC_STACK_SIZE , .), 8);
+    PROVIDE(__SVC_STACK_TOP = .) ;
+  } > STACKS
+
+  /* Abort mode stack definition */
+  .stack_abt :
+  {
+    . = ALIGN(MAX(__ABT_STACK_SIZE , .), 8);
+    PROVIDE(__ABT_STACK_TOP = .) ;
+  } > STACKS
+
+  /* Undefined mode stack definition */
+  .stack_und :
+  {
+    . = ALIGN(MAX(__UND_STACK_SIZE , .), 8);
+    PROVIDE(__UND_STACK_TOP = .) ;
+  } > STACKS
+
+  /* Interrupt mode stack definition */
+  .stack_irq :
+  {
+    . = ALIGN(MAX(__IRQ_STACK_SIZE , .), 8);
+    PROVIDE(__IRQ_STACK_TOP = .) ;
+  } > STACKS
+
+  /* Fast interrupt mode stack definition */
+  .stack_fiq :
+  {
+    . = ALIGN(MAX(__FIQ_STACK_SIZE , .), 8);
+    PROVIDE(__FIQ_STACK_TOP = .) ;
+  } > STACKS
 
   _rom_data_begin = LOADADDR(.data);
 }
