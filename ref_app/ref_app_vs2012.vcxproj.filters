@@ -104,6 +104,9 @@
     <Filter Include="src\mcal\stm32f429">
       <UniqueIdentifier>{3d9c9058-7846-4b3f-b8aa-c64674ccacb1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\mcal_led">
+      <UniqueIdentifier>{a5154a31-1f24-49ff-86d4-53b81fb2b4c7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\app\led\app_led.cpp">
@@ -381,6 +384,18 @@
     </ClCompile>
     <ClCompile Include="src\app\benchmark\app_benchmark.cpp">
       <Filter>src\app\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mcal\am335x\mcal_cpu_detail.cpp">
+      <Filter>src\mcal\am335x</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mcal\am335x\mcal_cpu_detail_secure.cpp">
+      <Filter>src\mcal\am335x</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mcal\am335x\mcal_eep.cpp">
+      <Filter>src\mcal\am335x</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mcal\am335x\mcal_spi.cpp">
+      <Filter>src\mcal\am335x</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -690,9 +705,6 @@
     <ClInclude Include="src\mcal\am335x\mcal_reg.h">
       <Filter>src\mcal\am335x</Filter>
     </ClInclude>
-    <ClInclude Include="src\mcal\am335x\mcal_reg_access.h">
-      <Filter>src\mcal\am335x</Filter>
-    </ClInclude>
     <ClInclude Include="src\mcal\am335x\mcal_ser.h">
       <Filter>src\mcal\am335x</Filter>
     </ClInclude>
@@ -812,9 +824,6 @@
     </ClInclude>
     <ClInclude Include="src\util\STL_C++11_Compatibility\impl\type_traits_impl.h">
       <Filter>src\util\STL_C++11_Compatibility\impl</Filter>
-    </ClInclude>
-    <ClInclude Include="src\mcal\am335x\mcal_debug_monitor.h">
-      <Filter>src\mcal\am335x</Filter>
     </ClInclude>
     <ClInclude Include="src\mcal\avr\mcal_debug_monitor.h">
       <Filter>src\mcal\avr</Filter>
@@ -968,6 +977,42 @@
     </ClInclude>
     <ClInclude Include="src\mcal\stm32f429\mcal_wdg.h">
       <Filter>src\mcal\stm32f429</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\mcal_reg_access_dynamic.h">
+      <Filter>src\mcal</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\mcal_reg_access_static.h">
+      <Filter>src\mcal</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\am335x\mcal_cpu_detail.h">
+      <Filter>src\mcal\am335x</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\am335x\mcal_cpu_detail_secure.h">
+      <Filter>src\mcal\am335x</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\am335x\mcal_memory_progmem.h">
+      <Filter>src\mcal\am335x</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\am335x\mcal_eep.h">
+      <Filter>src\mcal\am335x</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal_led\mcal_led_console.h">
+      <Filter>src\mcal_led</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal_led\mcal_led_port.h">
+      <Filter>src\mcal_led</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal_led\mcal_led_port_inverted.h">
+      <Filter>src\mcal_led</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal_led\mcal_led_pwm.h">
+      <Filter>src\mcal_led</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal_led\mcal_led_base.h">
+      <Filter>src\mcal_led</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal_led\mcal_led_boolean_state_base.h">
+      <Filter>src\mcal_led</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

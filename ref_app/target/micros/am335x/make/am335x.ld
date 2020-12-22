@@ -1,15 +1,15 @@
 
 /*
- Copyright Michael Schnerr 2011 - 2013.
- Copyright Christopher Kormanyos 2013.
+ Copyright Michael Schnerr 2011 - 2014.
+ Copyright Christopher Kormanyos 2013 - 2020.
  Distributed under the Boost Software License,
  Version 1.0. (See accompanying file LICENSE_1_0.txt
  or copy at http://www.boost.org/LICENSE_1_0.txt)
 */
 
-/* Linker script for SitaraWare AM335x ARM(R) A8 MCU */
+/* Linker script for Bare-Metal BeagleBone(R) AM335x ARM(R) A8 MCU */
 
-INPUT(libc.a libm.a)
+INPUT(libc.a libm.a libgcc.a)
 
 OUTPUT_FORMAT("elf32-littlearm", "elf32-littlearm", "elf32-littlearm")
 OUTPUT_ARCH(arm)
@@ -21,11 +21,6 @@ _rom_end   = 0x402F7FFC;
 /* The beginning of the RAM area */
 _ram_begin = 0x402F8000;
 
-/* The beginning and end (i.e., top) of the stack */
-/* Set up a stack with a size of 8K */
-_stack_begin = 0x402FA000;
-_stack_end   = 0x402FC000;
-
 /* Set up the various stacks with total size of 12K. */
 
 __SYS_STACK_SIZE = 0x2800;
@@ -34,9 +29,6 @@ __ABT_STACK_SIZE = 0x0100;
 __UND_STACK_SIZE = 0x0100;
 __IRQ_STACK_SIZE = 0x0200;
 __FIQ_STACK_SIZE = 0x0200;
-
-/* The end of the stack */
-__initial_stack_pointer = 0x402FFFFC;
 
 /* Set up the memory regions. */
 

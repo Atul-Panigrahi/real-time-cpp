@@ -1,6 +1,6 @@
 
 ///////////////////////////////////////////////////////////////////////////////
-//  Copyright Christopher Kormanyos 2013.
+//  Copyright Christopher Kormanyos 2013 - 2020.
 //  Distributed under the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt
 //  or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -65,7 +65,7 @@ void __my_startup()
   mcal::cpu::init();
 
   // Initialize statics from ROM to RAM.
-  // Zero-clear non-initialized static RAM.
+  // Zero-clear default-initialized static RAM.
   crt::init_ram();
   mcal::wdg::secure::trigger();
 
@@ -73,7 +73,7 @@ void __my_startup()
   crt::init_ctors();
   mcal::wdg::secure::trigger();
 
-  // Call main (and never return).
+  // Jump to main (and never return).
   asm volatile("ldr r3, =main");
   asm volatile("blx r3");
 

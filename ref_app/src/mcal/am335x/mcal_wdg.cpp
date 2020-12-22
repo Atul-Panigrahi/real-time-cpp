@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-//  Copyright Christopher Kormanyos 2013.
+//  Copyright Christopher Kormanyos 2013 - 2020.
 //  Distributed under the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt
 //  or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -7,7 +7,7 @@
 
 #include <array>
 #include <cstdint>
-#include <mcal_reg_access.h>
+#include <mcal_reg.h>
 #include <mcal_wdg.h>
 
 namespace
@@ -15,21 +15,21 @@ namespace
   struct wdg_detail
   {
   public:
-    template<const std::uint32_t wspr_pattern_01,
-             const std::uint32_t wspr_pattern_02>
+    template<const std::uint32_t wdg_action_pattern_01,
+             const std::uint32_t wdg_action_pattern_02>
     static void wdg_action()
     {
-      mcal::reg::access<std::uint32_t,
-                        std::uint32_t,
-                        mcal::reg::wdt1::wspr,
-                        wspr_pattern_01>::reg_set();
+      mcal::reg::reg_access_static<std::uint32_t,
+                                   std::uint32_t,
+                                   mcal::reg::wdt1::wspr,
+                                   wdg_action_pattern_01>::reg_set();
 
       wdg_wait_clock_stable();
 
-      mcal::reg::access<std::uint32_t,
-                        std::uint32_t,
-                        mcal::reg::wdt1::wspr,
-                        wspr_pattern_02>::reg_set();
+      mcal::reg::reg_access_static<std::uint32_t,
+                                   std::uint32_t,
+                                   mcal::reg::wdt1::wspr,
+                                   wdg_action_pattern_02>::reg_set();
 
       wdg_wait_clock_stable();
     }
@@ -41,10 +41,11 @@ namespace
 
       do
       {
-        wwps_mask_value = std::uint32_t(  mcal::reg::access<std::uint32_t,
-                                                            std::uint32_t,
-                                                            mcal::reg::wdt1::wwps>::reg_get()
-                                        & UINT32_C(0x3F));
+        wwps_mask_value = mcal::reg::reg_access_static<std::uint32_t,
+                                            std::uint32_t,
+                                            mcal::reg::wdt1::wwps>::reg_get();
+
+        wwps_mask_value &= UINT32_C(0x3F);
       }
       while(wwps_mask_value != UINT32_C(0));
     }
@@ -59,46 +60,46 @@ void mcal::wdg::init(const config_type*)
 
   // Select the watchdog timer clock source to be 32kHz,
   // originating from the 32K clock divider.
-  mcal::reg::access<std::uint32_t,
-                    std::uint32_t,
-                    mcal::reg::cm_dpll::clksel_wdt1_clk,
-                    UINT32_C(0)>::bit_set();
+  mcal::reg::reg_access_static<std::uint32_t,
+                               std::uint32_t,
+                               mcal::reg::cm_dpll::clksel_wdt1_clk,
+                               UINT32_C(0)>::bit_set();
 
   // Set the watchdog prescaler to 2^0 = 1.
-  mcal::reg::access<std::uint32_t,
-                    std::uint32_t,
-                    mcal::reg::wdt1::wclr,
-                    UINT32_C(0)>::reg_msk<0x3C>();
+  mcal::reg::reg_access_static<std::uint32_t,
+                               std::uint32_t,
+                               mcal::reg::wdt1::wclr,
+                               UINT32_C(0)>::reg_msk<0x3C>();
 
   // Activate the watchdog prescaler.
-  mcal::reg::access<std::uint32_t,
-                    std::uint32_t,
-                    mcal::reg::wdt1::wclr,
-                    UINT32_C(5)>::bit_set();
+  mcal::reg::reg_access_static<std::uint32_t,
+                               std::uint32_t,
+                               mcal::reg::wdt1::wclr,
+                               UINT32_C(5)>::bit_set();
 
   // Set the watchdog delay register to zero.
-  mcal::reg::access<std::uint32_t,
-                    std::uint32_t,
-                    mcal::reg::wdt1::wdly,
-                    UINT32_C(0)>::reg_set();
+  mcal::reg::reg_access_static<std::uint32_t,
+                               std::uint32_t,
+                               mcal::reg::wdt1::wdly,
+                               UINT32_C(0)>::reg_set();
 
   // Set the watchdog *counter* register for a period of 100ms.
-  mcal::reg::access<std::uint32_t,
-                    std::uint32_t,
-                    mcal::reg::wdt1::wcrr,
-                    std::uint32_t(UINT32_C(0xFFFFFFFE) - UINT32_C(3200))>::reg_set();
+  mcal::reg::reg_access_static<std::uint32_t,
+                               std::uint32_t,
+                               mcal::reg::wdt1::wcrr,
+                               std::uint32_t(UINT32_C(0xFFFFFFFE) - UINT32_C(3200))>::reg_set();
 
   // Set the watchdog *reload* register for a period of 100ms.
-  mcal::reg::access<std::uint32_t,
-                    std::uint32_t,
-                    mcal::reg::wdt1::wldr,
-                    std::uint32_t(UINT32_C(0xFFFFFFFE) - UINT32_C(3200))>::reg_set();
+  mcal::reg::reg_access_static<std::uint32_t,
+                               std::uint32_t,
+                               mcal::reg::wdt1::wldr,
+                               std::uint32_t(UINT32_C(0xFFFFFFFE) - UINT32_C(3200))>::reg_set();
 
   // Initialize the watchdog trigger to zero.
-  mcal::reg::access<std::uint32_t,
-                    std::uint32_t,
-                    mcal::reg::wdt1::wtgr,
-                    UINT32_C(0)>::reg_set();
+  mcal::reg::reg_access_static<std::uint32_t,
+                               std::uint32_t,
+                               mcal::reg::wdt1::wtgr,
+                               UINT32_C(0)>::reg_set();
 
   // Start the watchdog timer.
   wdg_detail::wdg_action<UINT32_C(0x0000BBBB),
@@ -129,10 +130,10 @@ void mcal::wdg::secure::trigger()
       UINT32_C(611953), UINT32_C(746773), UINT32_C(882377), UINT32_C(1020379)
   }};
 
-  static prime_sequence_type::size_type prime_sequence_index;
+  static volatile prime_sequence_type::size_type prime_sequence_index;
 
   // Read from the hardware the watchdog trigger value for this cycle.
-  const std::uint32_t this_watchdog_trigger_value = mcal::reg::access<std::uint32_t,
+  const std::uint32_t this_watchdog_trigger_value = mcal::reg::reg_access_static<std::uint32_t,
                                                                       std::uint32_t,
                                                                       mcal::reg::wdt1::wtgr>::reg_get();
 
@@ -145,7 +146,7 @@ void mcal::wdg::secure::trigger()
                                                                   + prime_sequence[next_prime_sequence_index]);
 
   // Set the watchdog trigger value for the next cycle.
-  mcal::reg::dynamic_access<std::uint32_t,
+  mcal::reg::reg_access_dynamic<std::uint32_t,
                             std::uint32_t>::reg_set(mcal::reg::wdt1::wtgr,
                                                     next_watchdog_trigger_value);
 

@@ -9,8 +9,10 @@
 # compiler flags for the target architecture
 # ------------------------------------------------------------------------------
 
-GCC_VERSION   = 4.8.3
+GCC_VERSION   = 9.3.1
 GCC_TARGET    = arm-none-eabi
+
+TGT_STL_DIR   = STL
 
 TGT_CFLAGS    = -mcpu=cortex-m4                                \
                 -mtune=cortex-m4                               \
@@ -21,14 +23,9 @@ TGT_CFLAGS    = -mcpu=cortex-m4                                \
                 -mno-unaligned-access                          \
                 -mno-long-calls
 
-#                -mfloat-abi=soft                               \
-
-#                -mfloat-abi=hard                               \
-#                -mfpu=fpv4-sp-d16                              \
-#                -ffast-math                                    \
-
 TGT_CPPFLAGS  = -std=c++11                                     \
                 -Wzero-as-null-pointer-constant                \
+                -I$(PATH_APP)/util/$(TGT_STL_DIR)              \
                 -I$(PATH_APP)/util/STL_C++14_Compatibility
 
 TGT_AFLAGS    =
