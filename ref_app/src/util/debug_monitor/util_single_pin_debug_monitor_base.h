@@ -8,9 +8,10 @@
 #ifndef _UTIL_SINGLE_PIN_DEBUG_MONITOR_BASE_2013_05_16_H_
   #define _UTIL_SINGLE_PIN_DEBUG_MONITOR_BASE_2013_05_16_H_
 
-  #include <cstdint>
   #include <algorithm>
   #include <array>
+  #include <cstdint>
+  #include <iterator>
   #include <mcal_port.h>
   #include <util/utility/util_noncopyable.h>
   #include <util/utility/util_two_part_data_manipulation.h>
@@ -46,6 +47,7 @@
     protected:
       // Set up the driver buffer.
       static const std::uint_fast8_t driver_buffer_size = std::uint_fast8_t(8U);
+
       typedef std::array<std::uint8_t, driver_buffer_size> driver_buffer_type;
 
       typedef enum enum_driver_transmit_state_type
@@ -62,20 +64,21 @@
       }
       driver_transmit_state_type;
 
-      driver_buffer_type         driver_buffer;
       std::uint_fast8_t          driver_buffer_length;
       bool                       driver_is_in_send_mode;
       std::uint_fast8_t          driver_current_byte_value;
       std::uint_fast8_t          driver_received_nothing_counter;
       driver_transmit_state_type driver_transmit_state;
+      volatile std::uint8_t      driver_buffer[driver_buffer_size];
 
-      single_pin_debug_monitor_base() : driver_buffer(),
-                                        driver_buffer_length(0U),
+      single_pin_debug_monitor_base() : driver_buffer_length(0U),
                                         driver_is_in_send_mode(false),
                                         driver_current_byte_value(0U),
                                         driver_received_nothing_counter(0U),
                                         driver_transmit_state(recieve_start_bit)
       {
+        std::fill(driver_buffer, driver_buffer + driver_buffer_size, UINT8_C(0));
+
         driver_flush_buffer();
       }
 
@@ -90,7 +93,7 @@
       {
         driver_buffer_length  = std::uint_fast8_t(0U);
         driver_transmit_state = recieve_start_bit;
-        std::fill(driver_buffer.begin(), driver_buffer.end(), driver_buffer_type::value_type(0U));
+        std::fill(std::begin(driver_buffer), std::end(driver_buffer), driver_buffer_type::value_type(0U));
       }
     };
 
@@ -99,21 +102,15 @@
   template<typename addr_type, const addr_type addr_offset>
   void util::single_pin_debug_monitor_base::protocol_task()
   {
-    // This protocol task embodies the "BWD" protocol.
+    // This protocol task embodies the "bwd" protocol.
 
     if(driver_is_in_send_mode)
     {
       return;
     }
 
-    // Note: These variables are shielded from aggressive optimization
-    // with the volatile qualifier. This is because direct memory access
-    // might *seem* to simply do nothing for a highly optimizing compiler.
-    // The volatile qualification reduces the risk of the memory access
-    // code being wrongly optimized away (partly or entirely).
-
-    volatile std::uint_fast8_t data_elements;
-    volatile std::uint_fast8_t service_id;
+    std::uint_fast8_t data_elements;
+    std::uint_fast8_t service_id;
 
     // Obtain the service ID for a read or write command,
     // and set the number of data elements in the command.
@@ -163,7 +160,7 @@
     // of the target system.
 
     const std::uint_least16_t address_from_buffer =
-      std::uint_least16_t(util::make_long<std::uint16_t>(driver_buffer[1U], driver_buffer[2U]));
+      std::uint_least16_t(util::make_long(driver_buffer[1U], driver_buffer[2U]));
 
     const addr_type address = addr_type(addr_offset + address_from_buffer);
 
@@ -172,7 +169,7 @@
     {
       if(driver_buffer_length == std::uint_fast8_t(3U))
       {
-        std::fill(driver_buffer.begin(), driver_buffer.begin() + 4U, std::uint8_t(0U));
+        std::fill(std::begin(driver_buffer), std::begin(driver_buffer) + 4U, std::uint8_t(0U));
 
         switch(data_elements)
         {
@@ -187,8 +184,8 @@
               // Read a word with the command 'w'.
               const std::uint16_t value = *reinterpret_cast<volatile std::uint16_t*>(address);
 
-              driver_buffer[1U] = util::hi_part<std::uint8_t, std::uint16_t>(value);
-              driver_buffer[0U] = util::lo_part<std::uint8_t, std::uint16_t>(value);
+              driver_buffer[1U] = util::hi_part<std::uint8_t>(value);
+              driver_buffer[0U] = util::lo_part<std::uint8_t>(value);
             }
             break;
 
@@ -197,13 +194,13 @@
               // Read a dword with the command 'd'.
               const std::uint32_t value = *reinterpret_cast<volatile std::uint32_t*>(address);
 
-              const std::uint16_t value_lo = util::lo_part<std::uint16_t, std::uint32_t>(value);
-              const std::uint16_t value_hi = util::hi_part<std::uint16_t, std::uint32_t>(value);
+              const std::uint16_t value_lo = util::lo_part<std::uint16_t>(value);
+              const std::uint16_t value_hi = util::hi_part<std::uint16_t>(value);
 
-              driver_buffer[3U] = util::hi_part<std::uint8_t, std::uint16_t>(value_hi);
-              driver_buffer[2U] = util::lo_part<std::uint8_t, std::uint16_t>(value_hi);
-              driver_buffer[1U] = util::hi_part<std::uint8_t, std::uint16_t>(value_lo);
-              driver_buffer[0U] = util::lo_part<std::uint8_t, std::uint16_t>(value_lo);
+              driver_buffer[3U] = util::hi_part<std::uint8_t>(value_hi);
+              driver_buffer[2U] = util::lo_part<std::uint8_t>(value_hi);
+              driver_buffer[1U] = util::hi_part<std::uint8_t>(value_lo);
+              driver_buffer[0U] = util::lo_part<std::uint8_t>(value_lo);
             }
             break;
         }
@@ -229,8 +226,7 @@
             {
               // Write a word with the command 'W'.
               const std::uint16_t value =
-                util::make_long<std::uint16_t>(static_cast<std::uint8_t>(driver_buffer[3U]),
-                                                static_cast<std::uint8_t>(driver_buffer[4U]));
+                util::make_long(driver_buffer[3U], driver_buffer[4U]);
 
               *reinterpret_cast<volatile std::uint16_t*>(address) = value;
             }
@@ -240,14 +236,12 @@
             {
               // Write a dword with the command 'D'.
               const std::uint16_t value_lo =
-                util::make_long<std::uint16_t>(static_cast<std::uint8_t>(driver_buffer[3U]),
-                                                static_cast<std::uint8_t>(driver_buffer[4U]));
+                util::make_long(driver_buffer[3U], driver_buffer[4U]);
 
               const std::uint16_t value_hi =
-                util::make_long<std::uint16_t>(static_cast<std::uint8_t>(driver_buffer[5U]),
-                                                static_cast<std::uint8_t>(driver_buffer[6U]));
+                util::make_long(driver_buffer[5U], driver_buffer[6U]);
 
-              *reinterpret_cast<volatile std::uint32_t*>(address) = util::make_long<std::uint32_t>(value_lo, value_hi);
+              *reinterpret_cast<volatile std::uint32_t*>(address) = util::make_long(value_lo, value_hi);
             }
             break;
         }

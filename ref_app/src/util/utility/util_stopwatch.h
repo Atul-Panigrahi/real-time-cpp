@@ -5,20 +5,34 @@
 //  or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef _UTIL_STOPWATCH_2014_01_07_H_
-  #define _UTIL_STOPWATCH_2014_01_07_H_
-
-  #include <util/utility/util_noncopyable.h>
+#ifndef UTIL_STOPWATCH_2014_01_07_H_
+  #define UTIL_STOPWATCH_2014_01_07_H_
 
   namespace util
   {
     template<typename clock_type>
-    class stopwatch : private util::noncopyable
+    class stopwatch final
     {
     public:
       typedef typename clock_type::duration duration_type;
 
       stopwatch() : my_start(clock_type::now()) { }
+
+      stopwatch(typename clock_type::time_point start) : my_start(start) { }
+
+      stopwatch(const stopwatch& other) : my_start(other.my_start) { }
+
+      ~stopwatch() { }
+
+      stopwatch& operator=(const stopwatch& other)
+      {
+        if(this != &other)
+        {
+          my_start = other.my_start;
+        }
+
+        return *this;
+      }
 
       duration_type elapsed() const
       {
@@ -31,7 +45,7 @@
       }
 
     private:
-       typename clock_type::time_point my_start;
+        typename clock_type::time_point my_start;
     };
   }
 
@@ -39,4 +53,4 @@
   //  const auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(my_stopwatch.elapsed()).count();
   //  const auto elapsed = std::chrono::duration_cast<std::chrono::duration<float>>(my_stopwatch.elapsed()).count();
 
-#endif // _UTIL_STOPWATCH_2014_01_07_H_
+#endif // UTIL_STOPWATCH_2014_01_07_H_

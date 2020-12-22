@@ -6,7 +6,7 @@
 //
 
 // RL78 startup code.
-// Completely written in C++ for RL78 FG12 by Chris.
+// Expressed with C++ for RL78 FG12 by Chris.
 
 #include <mcal/mcal.h>
 
@@ -18,7 +18,7 @@ namespace crt
   void init_ctors();
 }
 
-extern "C" void __my_startup();
+extern "C" void __my_startup() __attribute__((used, noinline));
 
 void __my_startup()
 {
@@ -29,7 +29,7 @@ void __my_startup()
   mcal::cpu::init();
 
   // Initialize statics from ROM to RAM.
-  // Zero-clear non-initialized static RAM.
+  // Zero-clear default-initialized static RAM.
   crt::init_ram();
   mcal::wdg::secure::trigger();
 
@@ -37,7 +37,7 @@ void __my_startup()
   crt::init_ctors();
   mcal::wdg::secure::trigger();
 
-  // Call main (and never return).
+  // Jump to main (and never return).
   asm volatile("call !!_main");
 
   // Catch an unexpected return from main.

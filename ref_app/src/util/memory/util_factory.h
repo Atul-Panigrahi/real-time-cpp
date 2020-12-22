@@ -1,14 +1,15 @@
 ///////////////////////////////////////////////////////////////////////////////
-//  Copyright Christopher Kormanyos 2007 - 2013.
+//  Copyright Christopher Kormanyos 2007 - 2020.
 //  Distributed under the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt
 //  or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef _UTIL_FACTORY_2012_02_19_H_
-  #define _UTIL_FACTORY_2012_02_19_H_
+#ifndef UTIL_FACTORY_2012_02_19_H_
+  #define UTIL_FACTORY_2012_02_19_H_
 
   #include <memory>
+
   #include <util/utility/util_noncopyable.h>
 
   namespace util
@@ -25,13 +26,13 @@
     };
 
     template<typename T,
-             typename Alloc = std::allocator<T>>
+             typename alloc = std::allocator<T>>
     class factory
     {
     public:
       typedef T     value_type;
       typedef T*    pointer_type;
-      typedef Alloc allocator_type;
+      typedef alloc allocator_type;
 
       static pointer_type make()
       {
@@ -51,12 +52,12 @@
     private:
       static void* allocate()
       {
-        return allocator_type().allocate(1U);
+        return allocator_type().allocate(1U, nullptr);
       }
     };
   }
 
-#endif // _UTIL_FACTORY_2012_02_19_H_
+#endif // UTIL_FACTORY_2012_02_19_H_
 
 /*
 #include <util/memory/util_factory.h>
@@ -74,17 +75,18 @@ private:
 class another : public util::factory_product
 {
 public:
-  another(const int m_, const int n_) : m(m_),
-                                        n(n_) { }
+  another(const int m, const int n) : my_m(m),
+                                      my_n(n) { }
+
   virtual ~another() { }
 
 private:
-  const int m;
-  const int n;
+  const int my_m;
+  const int my_n;
 
   virtual void init() { }
 };
 
 something* p_something = util::factory<something>::make();
-another*   p_another   = util::factory<another>::make(123, 456);
+another*   p_another   = util::factory<another  >::make(123, 456);
 */

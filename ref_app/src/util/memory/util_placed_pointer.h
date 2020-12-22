@@ -1,23 +1,25 @@
 ///////////////////////////////////////////////////////////////////////////////
-//  Copyright Christopher Kormanyos 2007 - 2013.
+//  Copyright Christopher Kormanyos 2007 - 2020.
 //  Distributed under the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt
 //  or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef _UTIL_PLACED_PTR_2010_02_23_H_
-  #define _UTIL_PLACED_PTR_2010_02_23_H_
+#ifndef UTIL_PLACED_PTR_2010_02_23_H_
+  #define UTIL_PLACED_PTR_2010_02_23_H_
 
   #include <cstdint>
   #include <memory>
 
+  #include <util/utility/util_noncopyable.h>
+
   namespace util
   {
     template<typename T>
-    class placed_ptr
+    class placed_ptr : private util::noncopyable
     {
     public:
-      typedef T value_type;
+      typedef T           value_type;
       typedef value_type* pointer;
 
       placed_ptr()
@@ -37,7 +39,7 @@
       }
 
       pointer operator->() const { return my_ptr(); }
-      pointer get() { return my_ptr(); }
+      pointer get()              { return my_ptr(); }
 
     private:
       std::uint8_t my_buf[sizeof(T)];
@@ -46,10 +48,7 @@
       {
         return reinterpret_cast<pointer>(const_cast<void*>(static_cast<const void*>(my_buf)));
       }
-
-      placed_ptr(const placed_ptr&);
-      const placed_ptr& operator=(const placed_ptr&);
     };
   }
 
-#endif // _UTIL_PLACED_PTR_2010_02_23_H_
+#endif // UTIL_PLACED_PTR_2010_02_23_H_

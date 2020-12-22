@@ -1,52 +1,54 @@
 ///////////////////////////////////////////////////////////////////////////////
-//  Copyright Christopher Kormanyos 2007 - 2014.
+//  Copyright Christopher Kormanyos 2007 - 2019.
 //  Distributed under the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt
 //  or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
+#include <algorithm>
 #include <cstddef>
 #include <cstdint>
-#include <algorithm>
-#include <mcal_cpu.h>
-#include <util/utility/util_two_part_data_manipulation.h>
+
+#include <mcal_memory/mcal_memory_progmem_access.h>
 
 extern "C"
 {
-  extern std::uintptr_t _rom_data_begin;  // Start address for the initialization values of the rom-to-ram section.
-  extern std::uintptr_t _data_begin;      // Start address for the .data section.
-  extern std::uintptr_t _data_end;        // End address for the .data section.
-  extern std::uintptr_t _bss_begin;       // Start address for the .bss section.
-  extern std::uintptr_t _bss_end;         // End address for the .bss section.
+  extern mcal_progmem_uintptr_t _rom_data_begin;  // Start address for the initialization values of the rom-to-ram section.
+  extern std::uintptr_t         _data_begin;      // Start address for the .data section.
+  extern std::uintptr_t         _data_end;        // End address for the .data section.
+  extern std::uintptr_t         _bss_begin;       // Start address for the .bss section.
+  extern std::uintptr_t         _bss_end;         // End address for the .bss section.
 }
 
 namespace crt
 {
-  void init_ram() __attribute__((section(".startup")));
+  void init_ram() __attribute__((section(".startup"), used, noinline));
 }
 
 void crt::init_ram()
 {
   typedef std::uint16_t memory_aligned_type;
 
-  // Copy the data segment initializers from ROM to RAM.
+  // Copy the data segment initializers from rom-to-ram.
   // Note that all data segments are aligned by 2.
-  const std::size_t size = std::size_t(  static_cast<const memory_aligned_type*>(static_cast<const void*>(&_data_end))
-                                       - static_cast<const memory_aligned_type*>(static_cast<const void*>(&_data_begin)));
+  const std::size_t size_data =
+    std::size_t(  static_cast<const memory_aligned_type*>(static_cast<const void*>(&_data_end))
+                - static_cast<const memory_aligned_type*>(static_cast<const void*>(&_data_begin)));
 
-
-  volatile std::uint8_t* rom_source = static_cast<volatile std::uint8_t*>(static_cast<volatile void*>(&_rom_data_begin));
+  mcal_progmem_uintptr_t rom_source = reinterpret_cast<mcal_progmem_uintptr_t>(static_cast<void*>(&_rom_data_begin));
 
   std::for_each(static_cast<memory_aligned_type*>(static_cast<void*>(&_data_begin)),
-                static_cast<memory_aligned_type*>(static_cast<void*>(&_data_begin)) + size,
+                static_cast<memory_aligned_type*>(static_cast<void*>(&_data_begin)) + size_data,
                 [&rom_source](memory_aligned_type& ram_destination)
                 {
                   // Note that particular care needs to be taken to read program
-                  // memory with the function mcal::cpu::read_program_memory().
+                  // memory with the function mcal::memory::progmem::read().
 
-                  ram_destination = util::make_long<std::uint16_t>(mcal::cpu::read_program_memory(rom_source),
-                                                                   mcal::cpu::read_program_memory(rom_source + 1U));
+                  // Copy the data from the rom-source to the ram-destination.
+                  ram_destination =
+                    mcal::memory::progmem::read<std::uint16_t>(rom_source);
 
+                  // Acquire the next 16-bit address of the rom-source.
                   rom_source += 2U;
                 });
 

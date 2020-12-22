@@ -5,8 +5,8 @@
 //  or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef _MCAL_CPU_2009_02_14_H_
-  #define _MCAL_CPU_2009_02_14_H_
+#ifndef MCAL_CPU_2009_02_14_H_
+  #define MCAL_CPU_2009_02_14_H_
 
   #include <cstdint>
 
@@ -18,10 +18,8 @@
 
       inline void post_init() { }
 
-      inline void nop() { asm volatile("nop"); }
-
-      std::uint8_t read_program_memory(volatile std::uint8_t* pointer_to_program_memory);
+      inline void nop() noexcept { asm volatile("nop"); }
     }
   }
 
-#endif // _MCAL_CPU_2009_02_14_H_
+#endif // MCAL_CPU_2009_02_14_H_

@@ -1,12 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////////
-//  Copyright Christopher Kormanyos 2007 - 2013.
+//  Copyright Christopher Kormanyos 2007 - 2018.
 //  Distributed under the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt
 //  or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef _MCAL_REG_2010_04_10_H_
-  #define _MCAL_REG_2010_04_10_H_
+#ifndef MCAL_REG_2010_04_10_H_
+  #define MCAL_REG_2010_04_10_H_
 
   #include <cstdint>
 
@@ -18,26 +18,35 @@
       constexpr std::uint32_t periph_base     = UINT32_C(0x40000000);
       constexpr std::uint32_t scs_base        = UINT32_C(0xE000E000);
 
+      // System tick base address.
+      constexpr std::uint32_t stk_base        = UINT32_C(0xE000E010);
+
       // Individual unit base addresses.
       constexpr std::uint32_t scb_base        = scs_base        + UINT32_C(0x00000D00);
       constexpr std::uint32_t nvic_base       = scs_base        + UINT32_C(0x00000100);
+      constexpr std::uint32_t sys_tick_base   = scs_base        + UINT32_C(0x00000010);
       constexpr std::uint32_t apb1periph_base = periph_base     + UINT32_C(0x00000000);
       constexpr std::uint32_t pwr_base        = apb1periph_base + UINT32_C(0x00007000);
-      constexpr std::uint32_t ahb1periph_base = periph_base     + UINT32_C(0x00020000);
-      constexpr std::uint32_t rcc_base        = ahb1periph_base + UINT32_C(0x00003800);
-      constexpr std::uint32_t flash_r_base    = ahb1periph_base + UINT32_C(0x00003C00);
+      constexpr std::uint32_t ahbperiph_base  = periph_base     + UINT32_C(0x00020000);
+      constexpr std::uint32_t rcc_base        = ahbperiph_base  + UINT32_C(0x00003800);
+      constexpr std::uint32_t flash_r_base    = ahbperiph_base  + UINT32_C(0x00003C00);
 
-      constexpr std::uint32_t gpioa_base      = ahb1periph_base + UINT32_C(0x0000);
-      constexpr std::uint32_t gpiob_base      = ahb1periph_base + UINT32_C(0x0400);
-      constexpr std::uint32_t gpioc_base      = ahb1periph_base + UINT32_C(0x0800);
-      constexpr std::uint32_t gpiod_base      = ahb1periph_base + UINT32_C(0x0C00);
-      constexpr std::uint32_t gpioe_base      = ahb1periph_base + UINT32_C(0x1000);
-      constexpr std::uint32_t gpiof_base      = ahb1periph_base + UINT32_C(0x1400);
-      constexpr std::uint32_t gpiog_base      = ahb1periph_base + UINT32_C(0x1800);
+      constexpr std::uint32_t sys_tick_ctrl   = sys_tick_base   + UINT32_C(0x00000000);
+      constexpr std::uint32_t sys_tick_load   = sys_tick_base   + UINT32_C(0x00000004);
+      constexpr std::uint32_t sys_tick_val    = sys_tick_base   + UINT32_C(0x00000008);
+      constexpr std::uint32_t sys_tick_cal    = sys_tick_base   + UINT32_C(0x0000000C);
 
-      constexpr std::uint32_t tim4_base       = periph_base     + UINT32_C(0x0800);
+      constexpr std::uint32_t gpioa_base      = ahbperiph_base  + UINT32_C(0x0000);
+      constexpr std::uint32_t gpiob_base      = ahbperiph_base  + UINT32_C(0x0400);
+      constexpr std::uint32_t gpioc_base      = ahbperiph_base  + UINT32_C(0x0800);
+      constexpr std::uint32_t gpiod_base      = ahbperiph_base  + UINT32_C(0x0C00);
+      constexpr std::uint32_t gpioe_base      = ahbperiph_base  + UINT32_C(0x1000);
+      constexpr std::uint32_t gpiof_base      = ahbperiph_base  + UINT32_C(0x1400);
+      constexpr std::uint32_t gpiog_base      = ahbperiph_base  + UINT32_C(0x1800);
 
-      constexpr std::uint32_t iwdg_base       = periph_base     + UINT32_C(0x3000);
+      constexpr std::uint32_t tim4_base       = apb1periph_base + UINT32_C(0x0800);
+
+      constexpr std::uint32_t iwdg_base       = apb1periph_base + UINT32_C(0x3000);
 
       // System registers.
       constexpr std::uint32_t scb_cpuid       = scb_base        + UINT32_C(0x0000);  // 32-bit register.
@@ -153,7 +162,7 @@
       constexpr std::uint32_t tim4_ccmr1      = tim4_base       + UINT32_C(0x0018);  // 16-bit register.
       constexpr std::uint32_t tim4_ccmr2      = tim4_base       + UINT32_C(0x001C);  // 16-bit register.
       constexpr std::uint32_t tim4_ccer       = tim4_base       + UINT32_C(0x0020);  // 16-bit register.
-      constexpr std::uint32_t tim4_cnt        = tim4_base       + UINT32_C(0x0024);  // 15-bit register.
+      constexpr std::uint32_t tim4_cnt        = tim4_base       + UINT32_C(0x0024);  // 16-bit register.
       constexpr std::uint32_t tim4_psc        = tim4_base       + UINT32_C(0x0028);  // 16-bit register.
       constexpr std::uint32_t tim4_arr        = tim4_base       + UINT32_C(0x002C);  // 16-bit register.
       constexpr std::uint32_t tim4_rcr        = tim4_base       + UINT32_C(0x0030);  // 16-bit register.
@@ -177,7 +186,16 @@
       constexpr std::uint32_t nvic_icpr       = nvic_base       + UINT32_C(0x0180);  // 32-bit registers : Interrupt clear pending registers.
       constexpr std::uint32_t nvic_iabr       = nvic_base       + UINT32_C(0x0200);  // 32-bit registers : Interrupt active bit registers.
       constexpr std::uint32_t nvic_ip         = nvic_base       + UINT32_C(0x0300);  //  8-bit registers : Interrupt priority registers (each one 8 bits wide).
+
+      // System tick registers.
+      constexpr std::uint32_t stk_ctrl        = stk_base        + UINT32_C(0x0000); // Privileged: SysTick control and status register.
+      constexpr std::uint32_t stk_load        = stk_base        + UINT32_C(0x0004); // Privileged: SysTick reload value register.
+      constexpr std::uint32_t stk_val         = stk_base        + UINT32_C(0x0008); // Privileged: SysTick current value register.
+      constexpr std::uint32_t stk_calib       = stk_base        + UINT32_C(0x000C); // Privileged: SysTick calibration value register.
     }
   }
 
-#endif // _MCAL_REG_2010_04_10_H_
+  #include <mcal/mcal_reg_access_dynamic.h>
+  #include <mcal/mcal_reg_access_static.h>
+
+#endif // MCAL_REG_2010_04_10_H_

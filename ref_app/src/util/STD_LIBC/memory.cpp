@@ -1,73 +1,71 @@
 ///////////////////////////////////////////////////////////////////////////////
-//  Copyright Christopher Kormanyos 2011 - 2013.
+//  Copyright Christopher Kormanyos 2011 - 2015.
 //  Distributed under the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt
 //  or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#include <stddef.h>
+#include <cstddef>
+#include <cstdint>
 
 // Implement some efficient memory functions from the standard C library.
 // If this file is included in the project, the linker will take these
-// instead of its own from the C-library. The functions in this file
-// *may* potentially save some code.
+// functions instead of its own corresponding functions from the C-library.
+// The functions in this file *might* potentially save some code and/or
+// runtime in the executable.
 
 extern "C"
-void* memset(void* s1, int c, size_t n)
+void* memset(void* dst, int c, size_t n)
 {
-  char* su1 = reinterpret_cast<char*>(s1);
+  // Convert the value c to unsigned char and copy it to the destination n times.
+
+  std::uint8_t* the_dst = reinterpret_cast<std::uint8_t*>(dst);
 
   for( ; n > static_cast<size_t>(0U); --n)
   {
-    *su1 = static_cast<char>(c);
-    ++su1;
+    *the_dst = static_cast<uint8_t>(c);
+    ++the_dst;
   }
 
-  return s1;
+  return dst;
 }
 
 extern "C"
-void* memcpy(void* s1, const void* s2, size_t n)
+void* memcpy(void* dst, const void* src, size_t n)
 {
-  // For additional implementation details, see
-  // P.J. Plauger, "The Standard C Library", Figure 14.4, page 400.
+        std::uint8_t* the_dst = reinterpret_cast<      std::uint8_t*>(dst);
+  const std::uint8_t* the_src = reinterpret_cast<const std::uint8_t*>(src);
 
-        char* su1 = reinterpret_cast<      char*>(s1);
-  const char* su2 = reinterpret_cast<const char*>(s2);
-
-  for( ; n > static_cast<size_t>(0U); --n)
+  for( ; n > static_cast<std::size_t>(0U); --n)
   {
-    *su1 = *su2;
-    ++su1;
-    ++su2;
+    *the_dst = *the_src;
+    ++the_dst;
+    ++the_src;
   }
 
-  return s1;
+  return dst;
 }
 
 extern "C"
-void* memmove(void* s1, const void* s2, size_t n)
+void* memmove(void* dst, const void* src, size_t n)
 {
-  // For additional implementation details, see
-  // P.J. Plauger, "The Standard C Library", Figure 14.5, page 400.
-
   // The function memmove *does* work properly even when its operands overlap.
 
-        char* sc1 = reinterpret_cast<      char*>(s1);
-  const char* sc2 = reinterpret_cast<const char*>(s2);
+        std::uint8_t* the_dst = static_cast<      std::uint8_t*>(dst);
+  const std::uint8_t* the_src = static_cast<const std::uint8_t*>(src);
 
   // Check for a range overlap.
-  if((sc2 < sc1) && (sc1 < (sc2 + n)))
+  if((the_src < the_dst) && (the_dst < (the_src + n)))
   {
-    sc1 += n;
-    sc2 += n;
+    the_dst += n;
+    the_src += n;
 
-    for( ; n > static_cast<size_t>(0U); --n)
+    for( ; n > static_cast<std::size_t>(0U); --n)
     {
       // Perform a backwards copy.
-      --sc1;
-      --sc2;
-      *sc1 = *sc2;
+      --the_dst;
+      --the_src;
+      *the_dst = *the_src;
     }
   }
   else
@@ -75,11 +73,11 @@ void* memmove(void* s1, const void* s2, size_t n)
     for( ; n > static_cast<size_t>(0U); --n)
     {
       // Perform a forwards copy.
-      *sc1 = *sc2;
-      ++sc1;
-      ++sc2;
+      *the_dst = *the_src;
+      ++the_dst;
+      ++the_src;
     }
   }
 
-  return s1;
+  return dst;
 }

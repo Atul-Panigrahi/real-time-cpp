@@ -7,7 +7,7 @@
 //
 
 // AM335x ARM(R) A8 startup code
-// Written in C++ for BeagleBone by Chris.
+// Expressed with C++ for TI AM3359 ARM(R) A8 (BeagleBone) by Christopher Kormanyos.
 
 #include <mcal/mcal.h>
 

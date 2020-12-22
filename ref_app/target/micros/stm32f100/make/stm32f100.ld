@@ -1,6 +1,6 @@
 
 /*
- Copyright Christopher Kormanyos 2007 - 2013.
+ Copyright Christopher Kormanyos 2007 - 2018.
  Distributed under the Boost Software License,
  Version 1.0. (See accompanying file LICENSE_1_0.txt
  or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -8,7 +8,7 @@
 
 /* Linker script for STM32F103x ARM(R) Cortex(TM)-M3 MCU */
 
-INPUT(libc.a libm.a)
+INPUT(libc.a libm.a libgcc.a)
 
 OUTPUT_FORMAT("elf32-littlearm", "elf32-littlearm", "elf32-littlearm")
 OUTPUT_ARCH(arm)
@@ -18,8 +18,8 @@ _rom_begin = 0x08000000;
 _rom_end   = 0x08007FFC;
 
 /* The beginning and end (i.e., top) of the stack */
-/* Set up a stack with a size of 1K */
-_stack_begin = 0x20001C00;
+/* Set up a stack with a size of 2K */
+_stack_begin = 0x20001800;
 _stack_end   = 0x20002000;
 
 __initial_stack_pointer = 0x20002000;
@@ -27,7 +27,7 @@ __initial_stack_pointer = 0x20002000;
 MEMORY
 {
   ROM(rx)  : ORIGIN = 0x08000000, LENGTH = 32K - 4
-  RAM(rwx) : ORIGIN = 0x20000000, LENGTH = 0x1C00
+  RAM(rwx) : ORIGIN = 0x20000000, LENGTH = 0x1800
 }
 
 SECTIONS
@@ -39,7 +39,7 @@ SECTIONS
   .isr_vector :
   {
     *(.isr_vector)
-    . = ALIGN(0x10);
+    . = ALIGN(0x100);
     KEEP(*(.isr_vector))
   } > ROM = 0xAAAA
 

@@ -1,8 +1,15 @@
+#
+#  Copyright Christopher Kormanyos 2007 - 2019.
+#  Distributed under the Boost Software License,
+#  Version 1.0. (See accompanying file LICENSE_1_0.txt
+#  or copy at http://www.boost.org/LICENSE_1_0.txt)
+#
+
 # ------------------------------------------------------------------------------
 # 
 # Makefile
 #
-# Build file for the ref_app application using the GNU tools
+# Build file for the reference application using the GNU tools
 #
 # Based on GNU Make 3.81
 #
@@ -21,7 +28,7 @@ PATH_TGT_MAKE  = $(PATH_TGT)/make
 PATH_BIN       = bin
 PATH_TMP       = tmp
 PATH_OBJ       = $(PATH_TMP)/obj
-PATH_SRC       = $(PATH_TMP)/src
+PATH_LST       = $(PATH_TMP)/lst
 PATH_ERR       = $(PATH_TMP)/err
 
 
@@ -34,24 +41,27 @@ include $(PATH_TGT_MAKE)/$(TGT)_flags.gmk   # Target compiler flags
 
 
 # ------------------------------------------------------------------------------
-# application
+# the application
 # ------------------------------------------------------------------------------
-APP = $(PATH_BIN)/app
-
+APP = $(PATH_BIN)/ref_app
 
 # ------------------------------------------------------------------------------
 # object files
 # ------------------------------------------------------------------------------
 FILES_TMP   = $(FILES_CPP) $(FILES_TGT)
 FILES_O     = $(addprefix $(PATH_OBJ)/, $(notdir $(addsuffix .o, $(FILES_TMP))))
-FILE_LDEF   = $(PATH_TGT_MAKE)/$(TGT).ld
-FILES_CRT_O = $(addprefix $(PATH_OBJ)/, $(notdir $(addsuffix .o, $(FILES_CRT))))
+
+
+# ------------------------------------------------------------------------------
+# linker definition file
+# ------------------------------------------------------------------------------
+LINKER_DEFINITION_FILE   = $(PATH_TGT_MAKE)/$(TGT).ld
 
 
 # ------------------------------------------------------------------------------
 # VPATH definition
 #
-# VPATH is required for the maker to find the C-/ASM-Source files.
+# VPATH is required for the maker to find the C/C++/ASM-Source files.
 # Extract the directory/module names from the file list with the dir
 # command and remove the duplicated directory names with the sort command.
 # FILES_PRJ is listed first to make sure that the source files in the project
@@ -63,36 +73,101 @@ VPATH := $(sort $(dir $(FILES_TMP)))
 # ------------------------------------------------------------------------------
 # Development tools
 # ------------------------------------------------------------------------------
-AR        = $(GCC_TARGET)-ar
-CL        = $(GCC_TARGET)-g++
-CC        = $(GCC_TARGET)-g++
-OBJDUMP   = $(GCC_TARGET)-objdump
-OBJCOPY   = $(GCC_TARGET)-objcopy
-NM        = $(GCC_TARGET)-nm
-CPPFILT   = $(GCC_TARGET)-c++filt
-READELF   = $(GCC_TARGET)-readelf
-SIZE      = $(GCC_TARGET)-size
+ifeq ($(GCC_PREFIX),)
+AR        = ar
+AS        = g++
+CC        = g++
+CPPFILT   = c++filt
+NM        = nm
+OBJDUMP   = objdump
+OBJCOPY   = objcopy
+READELF   = readelf
+SIZE      = size
+else
+AR        = $(GCC_PREFIX)-ar
+AS        = $(GCC_PREFIX)-g++
+CC        = $(GCC_PREFIX)-g++
+CPPFILT   = $(GCC_PREFIX)-c++filt
+NM        = $(GCC_PREFIX)-nm
+OBJDUMP   = $(GCC_PREFIX)-objdump
+OBJCOPY   = $(GCC_PREFIX)-objcopy
+READELF   = $(GCC_PREFIX)-readelf
+SIZE      = $(GCC_PREFIX)-size
+endif
+
 ECHO      = echo
 MAKE      = make
 MKDIR     = mkdir
+RM        = rm
 SED       = sed
 
 
 # ------------------------------------------------------------------------------
 # Tool parameters
 # ------------------------------------------------------------------------------
-C_INCLUDES = -I$(PATH_APP) -I$(PATH_APP)/mcal/$(TGT)
-GCCFLAGS   = $(C_INCLUDES) $(TGTFLAGS) -Wall -Wextra -pedantic -gdwarf-2 -fno-use-cxa-atexit -fno-exceptions -fno-enforce-eh-specs -O3 -finline-functions -finline-limit=64
-CFLAGS     = $(GCCFLAGS) -x c
-CPPFLAGS   = $(GCCFLAGS) -std=c++0x -fno-rtti -fno-nonansi-builtins -fno-threadsafe-statics -fno-enforce-eh-specs
-LFLAGS     = $(GCCFLAGS) -x none -nostartfiles -nostdlib
+C_INCLUDES = $(TGT_INCLUDES)                    \
+             -I$(PATH_APP)                      \
+             -I$(PATH_APP)/mcal/$(TGT)
 
+GCCFLAGS    = $(TGT_CFLAGS)                     \
+              -g                                \
+              -Wall                             \
+              -Wextra                           \
+              -pedantic                         \
+              -Wmain                            \
+              -Wundef                           \
+              -Wsign-conversion                 \
+              -Wunused-parameter                \
+              -Wuninitialized                   \
+              -Wmissing-declarations            \
+              -Wshadow                          \
+              -Wunreachable-code                \
+              -Wswitch-default                  \
+              -Wswitch-enum                     \
+              -Wcast-align                      \
+              -Wmissing-include-dirs            \
+              -Winit-self                       \
+              -Wfloat-equal                     \
+              -Wdouble-promotion                \
+              -gdwarf-2                         \
+              -fno-exceptions                   \
+              -ffunction-sections               \
+              -fdata-sections
+
+CFLAGS      = $(GCCFLAGS)                       \
+              -Wunsuffixed-float-constants      \
+              -x c                              \
+              -std=c99
+
+CPPFLAGS    = $(GCCFLAGS)                       \
+              $(TGT_CPPFLAGS)                   \
+              -x c++                            \
+              -fno-rtti                         \
+              -fstrict-enums                    \
+              -fno-use-cxa-atexit               \
+              -fno-use-cxa-get-exception-ptr    \
+              -fno-nonansi-builtins             \
+              -fno-threadsafe-statics           \
+              -fno-enforce-eh-specs             \
+              -ftemplate-depth=32               \
+              -Wzero-as-null-pointer-constant
+
+AFLAGS      = $(GCCFLAGS)                       \
+              $(TGT_CFLAGS)                     \
+              $(TGT_AFLAGS)                     \
+              -x assembler
+
+LDFLAGS     = $(GCCFLAGS)                       \
+              $(TGT_LDFLAGS)                    \
+              -x none                           \
+              -Wl,--gc-sections                 \
+              -Wl,-Map,$(APP).map
 
 # ------------------------------------------------------------------------------
 # Main-Dependencies (app: all)
 # ------------------------------------------------------------------------------
 .PHONY: all
-all: clean_prj version $(APP)_flash.hex $(APP)_nm.txt $(APP).elf
+all: clean_prj version $(APP)_flash.hex $(APP)_nm.txt $(APP).$(TGT_SUFFIX)
 
 
 # ------------------------------------------------------------------------------
@@ -111,8 +186,8 @@ clean_prj:
 	@-$(MKDIR) -p $(PATH_BIN)
 	@-$(MKDIR) -p $(PATH_OBJ)
 	@-$(MKDIR) -p $(PATH_ERR)
-	@-$(MKDIR) -p $(PATH_SRC)
-	@-rm -r $(PATH_BIN)   > NUL  2> NUL
+	@-$(MKDIR) -p $(PATH_LST)
+	@-$(RM) -r $(PATH_BIN)   > NUL  2> NUL
 	@-$(MKDIR) -p $(PATH_BIN)
 
 
@@ -125,11 +200,11 @@ clean_all:
 	@-$(MKDIR) -p $(PATH_BIN)
 	@-$(MKDIR) -p $(PATH_OBJ)
 	@-$(MKDIR) -p $(PATH_ERR)
-	@-$(MKDIR) -p $(PATH_SRC)
-	@-rm -r $(PATH_OBJ)   > NUL  2> NUL
-	@-rm -r $(PATH_ERR)   > NUL  2> NUL
-	@-rm -r $(PATH_SRC)   > NUL  2> NUL
-	@-rm -r $(PATH_BIN)   > NUL  2> NUL
+	@-$(MKDIR) -p $(PATH_LST)
+	@-$(RM) -r $(PATH_OBJ)   > NUL  2> NUL
+	@-$(RM) -r $(PATH_ERR)   > NUL  2> NUL
+	@-$(RM) -r $(PATH_LST)   > NUL  2> NUL
+	@-$(RM) -r $(PATH_BIN)   > NUL  2> NUL
 	@-$(MKDIR) -p $(PATH_BIN)
 
 
@@ -139,43 +214,55 @@ clean_all:
 .PHONY: version
 version:
   # Print the GNU make version and the compiler version
-	@$(ECHO) GNUmake version...
+	@$(ECHO) +++ Print GNUmake version
 	@$(MAKE) --version
-	@$(ECHO) GCC version...
-	@$(CL) -v
+	@$(ECHO)
+	@$(ECHO) +++ Print GCC version
+	@$(CC) -v
+	@$(ECHO)
+	@$(ECHO) +++ Print compiler include paths
+	@$(ECHO) $(C_INCLUDES)
+	@$(ECHO)
+	@$(ECHO) +++ Print compiler definitions
+	@$(ECHO) $(C_DEFINES)
+	@$(ECHO)
 
 
 # ------------------------------------------------------------------------------
-# link/locate application
+# link/locate application and generate an assembly list file
 # ------------------------------------------------------------------------------
-$(APP).elf : $(FILE_LDEF) $(FILES_O)
-	@-$(ECHO) +++ linking application: $(APP).elf
-	@-$(CL) $(LFLAGS) $(FILES_O) -Wl,-T$(FILE_LDEF),-Map,$(APP).map$(LFLAGS_WL) -o $(APP).elf
+$(APP).$(TGT_SUFFIX) : $(LINKER_DEFINITION_FILE) $(FILES_O)
+	@-$(ECHO) +++ linking application to generate: $(APP).$(TGT_SUFFIX)
+	@-$(CC) $(LDFLAGS) $(FILES_O) -o $(APP).$(TGT_SUFFIX)
+	@-$(ECHO) +++ generating assembly list file: $(APP).lss
+	@-$(OBJDUMP) -h -S $(APP).$(TGT_SUFFIX) > $(APP).lss
 
 
 # ------------------------------------------------------------------------------
-# parse object files for symbols
+# parse the object files to obtain symbol information, and create a size summary
 # ------------------------------------------------------------------------------
-$(APP)_nm.txt : $(APP).elf
-	@-$(ECHO) +++ parsing symbols with nm: $(APP)_nm.txt
-	@-$(NM) --numeric-sort --print-size $(APP).elf > $(APP)_nm.txt
-	@-$(ECHO) +++ demangling symbols with c++filt: $(APP)_cppfilt.txt
-	@-$(NM) --numeric-sort --print-size $(APP).elf | $(CPPFILT) > $(APP)_cppfilt.txt
-	@-$(ECHO) +++ parsing symbols with readelf: $(APP)_readelf.txt
-	@-$(READELF) --syms $(APP).elf > $(APP)_readelf.txt
-	@-$(ECHO) +++ creating size summary table with size: $(APP)_size.txt
-	@-$(SIZE) -A -t $(APP).elf > $(APP)_size.txt
+$(APP)_nm.txt : $(APP).$(TGT_SUFFIX)
+	@-$(ECHO) +++ parsing symbols with nm to generate: $(APP)_nm.txt
+	@-$(NM) --numeric-sort --print-size $(APP).$(TGT_SUFFIX) > $(APP)_nm.txt
+	@-$(ECHO) +++ demangling symbols with c++filt to generate: $(APP)_cppfilt.txt
+	@-$(NM) --numeric-sort --print-size $(APP).$(TGT_SUFFIX) | $(CPPFILT) > $(APP)_cppfilt.txt
+	@-$(ECHO) +++ parsing symbols with readelf to generate: $(APP)_readelf.txt
+ifeq ($(TGT_SUFFIX),elf)
+	@-$(READELF) --syms $(APP).$(TGT_SUFFIX) > $(APP)_readelf.txt
+else
+	@-$(ECHO) +++ not available for: $(APP).$(TGT_SUFFIX).
+endif
+	@-$(ECHO) +++ creating size summary table with size to generate: $(APP)_size.txt
+	@-$(SIZE) -A -t $(APP).$(TGT_SUFFIX) > $(APP)_size.txt
 
 
 # ------------------------------------------------------------------------------
 # create hex mask
 # ------------------------------------------------------------------------------
-$(APP)_flash.hex : $(APP).elf
-	@-$(ECHO) +++ creating hex module: $(APP)_flash.hex
-	@-$(OBJCOPY) -O ihex $(APP).elf $(APP).hex
-	@-$(OBJCOPY) -S -O binary $(APP).elf $(APP).bin
-	@-rm NUL
-
+$(APP)_flash.hex : $(APP).$(TGT_SUFFIX)
+	@-$(ECHO) +++ creating hex module: $(APP).hex.
+	@-$(OBJCOPY) -O ihex $(APP).$(TGT_SUFFIX) $(APP).hex
+	@-$(OBJCOPY) -S -O binary $(APP).$(TGT_SUFFIX) $(APP).bin
 
 # ------------------------------------------------------------------------------
 # Dependencyfile include (build)
@@ -184,11 +271,11 @@ $(APP)_flash.hex : $(APP).elf
 # If the files do not exist then the includes will be ignored.
 # ------------------------------------------------------------------------------
 ifneq ($(MAKECMDGOALS),rebuild)
--include $(subst .o,.d,$(FILES_O))       # for example Tmp/obj/SysStart.d, Tmp/obj/Hal.d, etc
+-include $(subst .o,.d,$(FILES_O))       # for example tmp/obj/sys_start.d, tmp/obj/mcal_cpu.d, etc
 endif
 
 
 # ------------------------------------------------------------------------------
-# include rules
+# include the pattern build rules
 # ------------------------------------------------------------------------------
 include $(PATH_APP_MAKE)/app_rules.gmk

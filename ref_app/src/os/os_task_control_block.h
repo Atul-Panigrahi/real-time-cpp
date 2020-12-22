@@ -1,67 +1,59 @@
 ///////////////////////////////////////////////////////////////////////////////
-//  Copyright Christopher Kormanyos 2007 - 2013.
+//  Copyright Christopher Kormanyos 2007 - 2016.
 //  Distributed under the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt
 //  or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef _OS_TASK_CONTROL_BLOCK_2013_07_30_H_
-  #define _OS_TASK_CONTROL_BLOCK_2013_07_30_H_
+#ifndef OS_TASK_CONTROL_BLOCK_2013_07_30_H_
+  #define OS_TASK_CONTROL_BLOCK_2013_07_30_H_
 
+  #include <cstddef>
   #include <cstdint>
-  #include <array>
   #include <limits>
   #include <os/os.h>
-  #include <util/utility/util_bit_mask.h>
 
   namespace os
   {
-    class task_control_block
+    class task_control_block final
     {
     public:
-      typedef std::uint_fast8_t  index_type;
+      task_control_block(const function_type init,
+                         const function_type func,
+                         const tick_type cycle,
+                         const tick_type offset) : my_init (init),
+                                                   my_func (func),
+                                                   my_cycle(cycle),
+                                                   my_timer(offset),
+                                                   my_event() { }
 
-      task_control_block(const function_type i,
-                         const function_type f,
-                         const tick_type c,
-                         const tick_type o);
+      task_control_block(const task_control_block& other_tcb) : my_init (other_tcb.my_init),
+                                                                my_func (other_tcb.my_func),
+                                                                my_cycle(other_tcb.my_cycle),
+                                                                my_timer(other_tcb.my_timer),
+                                                                my_event(other_tcb.my_event) { }
 
-      task_control_block(const task_control_block&);
+      ~task_control_block() { }
 
     private:
-      const    function_type init;
-      const    function_type func;
-      const    tick_type     cycle;
-      mutable  timer_type    timer;
-      volatile event_type    event;
-      const    index_type    index;
+      const function_type my_init;
+      const function_type my_func;
+      const tick_type     my_cycle;
+            timer_type    my_timer;
+            event_type    my_event;
 
-      static index_type task_global_index;
+      void initialize() const { my_init(); }
 
-      void initialize() const { init(); }
-
-      bool execute() const;
-
-      static task_control_block* get_running_task_pointer();
+      bool execute(const tick_type& timepoint_of_ckeck_ready);
 
       task_control_block();
-      const task_control_block& operator=(const task_control_block&);
+      task_control_block& operator=(const task_control_block&);
 
       friend void start_os   ();
-      friend void set_event  (const task_id_type, const event_type&);
+      friend bool set_event  (const task_id_type, const event_type&);
       friend void get_event  (event_type&);
       friend void clear_event(const event_type&);
     };
-
-    static_assert(OS_TASK_COUNT > 0U,
-                  "the task count must exceed zero");
-
-    static_assert(OS_TASK_COUNT == unsigned(task_id_end),
-                  "the task count must be equal to the highest task id");
-
-    typedef std::array<task_control_block, OS_TASK_COUNT> task_list_type;
-
-    extern task_list_type task_list;
   }
 
-#endif // _OS_TASK_CONTROL_BLOCK_2013_07_30_H_
+#endif // OS_TASK_CONTROL_BLOCK_2013_07_30_H_

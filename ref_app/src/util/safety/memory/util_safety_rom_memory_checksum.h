@@ -1,9 +1,11 @@
-#ifndef _UTIL_SAFETY_ROM_MEMORY_CHECKSUM_2013_11_27_H_
-  #define _UTIL_SAFETY_ROM_MEMORY_CHECKSUM_2013_11_27_H_
+#ifndef UTIL_SAFETY_ROM_MEMORY_CHECKSUM_2013_11_27_H_
+  #define UTIL_SAFETY_ROM_MEMORY_CHECKSUM_2013_11_27_H_
 
   #include <array>
   #include <limits>
+
   #include <mcal_cpu.h>
+  #include <mcal_memory/mcal_memory_progmem_access.h>
   #include <util/safety/memory/util_safety_memory_base.h>
   #include <util/utility/util_two_part_data_manipulation.h>
 
@@ -71,14 +73,14 @@
             const std::size_t memory_list_count>
   void util::safety::rom_memory_checksum<memory_address_type, memory_list_count>::finalize()
   {
-    const std::uint8_t expected_result_byte0 = mcal::cpu::read_program_memory(reinterpret_cast<volatile std::uint8_t*>(address_of_result + 3U));
-    const std::uint8_t expected_result_byte1 = mcal::cpu::read_program_memory(reinterpret_cast<volatile std::uint8_t*>(address_of_result + 2U));
-    const std::uint8_t expected_result_byte2 = mcal::cpu::read_program_memory(reinterpret_cast<volatile std::uint8_t*>(address_of_result + 1U));
-    const std::uint8_t expected_result_byte3 = mcal::cpu::read_program_memory(reinterpret_cast<volatile std::uint8_t*>(address_of_result + 0U));
+    const std::uint8_t expected_result_byte0 = mcal::memory::progmem::read(address_of_result + 3U);
+    const std::uint8_t expected_result_byte1 = mcal::memory::progmem::read(address_of_result + 2U);
+    const std::uint8_t expected_result_byte2 = mcal::memory::progmem::read(address_of_result + 1U);
+    const std::uint8_t expected_result_byte3 = mcal::memory::progmem::read(address_of_result + 0U);
 
     const std::uint32_t expected_result =
-      util::make_long<std::uint32_t>(util::make_long<std::uint16_t>(expected_result_byte0, expected_result_byte1),
-                                     util::make_long<std::uint16_t>(expected_result_byte2, expected_result_byte3));
+      util::make_long(util::make_long(expected_result_byte0, expected_result_byte1),
+                      util::make_long(expected_result_byte2, expected_result_byte3));
 
     memory_base_type::result_of_process = ((crc32_result == expected_result) ? memory_base_type::result_is_finished_and_correct
                                                                              : memory_base_type::result_is_finished_and_wrong);
@@ -104,4 +106,4 @@
     crc32_result = std::uint32_t(crc32_result << 4) ^ crc32_lookup_table[std::uint_fast8_t((std::uint_fast8_t(crc32_result >> 28) & UINT8_C(0x0F)) ^ (std::uint_fast8_t(the_byte &  0x0FU)))];
   }
 
-#endif // _UTIL_SAFETY_ROM_MEMORY_CHECKSUM_2013_11_27_H_
+#endif // UTIL_SAFETY_ROM_MEMORY_CHECKSUM_2013_11_27_H_

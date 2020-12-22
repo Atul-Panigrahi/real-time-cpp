@@ -1,0 +1,500 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="app">
+      <UniqueIdentifier>{05026f2b-390f-424a-b24a-73033960ef24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="app\make">
+      <UniqueIdentifier>{3e4d62e1-393a-4652-861b-115c75eed949}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="build">
+      <UniqueIdentifier>{16b42c54-b896-4cb6-b8a5-0436327def0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros">
+      <UniqueIdentifier>{0a8b6cbb-02d4-4780-a2a9-c5a1b34deb53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\avr">
+      <UniqueIdentifier>{de66c8a6-669d-452d-a873-565241e395de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\avr\make">
+      <UniqueIdentifier>{314e7494-f11e-45e1-bb0a-80529ba9a61f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\avr\startup">
+      <UniqueIdentifier>{3500d006-2e46-4281-adcb-a55d324a5d8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\stm32f100">
+      <UniqueIdentifier>{bb59a455-d3da-468a-a7b0-a98e288bce0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\stm32f100\make">
+      <UniqueIdentifier>{98393bf8-ed15-4ac1-90bf-0db9add1c35c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\stm32f100\startup">
+      <UniqueIdentifier>{c59321aa-9533-4c7a-8fe3-6d03e26392f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\am335x">
+      <UniqueIdentifier>{9b8f3b1f-73a5-4635-92f1-d96e7a0dc318}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\am335x\make">
+      <UniqueIdentifier>{a2bf7b3d-0b77-4ed2-9531-d7b905d99449}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\am335x\startup">
+      <UniqueIdentifier>{5448ad0f-89af-4486-b7b5-acbbd7097fc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\stm32f407">
+      <UniqueIdentifier>{929c88f9-9c63-4561-b552-640c83475ef2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\stm32f407\make">
+      <UniqueIdentifier>{af0127a0-f219-4ef0-8306-5ec9a7b00849}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\stm32f407\startup">
+      <UniqueIdentifier>{1e874255-7f2a-47d1-86a2-93c2a964b58a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\rl78">
+      <UniqueIdentifier>{607cacb8-ea40-4e32-9da1-4d52c66f9cfc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\rl78\make">
+      <UniqueIdentifier>{699262d8-5e0e-4d26-aa21-c1457354dbb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\rl78\startup">
+      <UniqueIdentifier>{9c63cee6-d07d-403b-8e60-13f7fa68b6bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\stm32f429">
+      <UniqueIdentifier>{1961760f-87c5-43fa-b965-6912e8fbf24d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\stm32f429\make">
+      <UniqueIdentifier>{6272ab58-5727-4841-8de8-e3a595018094}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\stm32f429\startup">
+      <UniqueIdentifier>{ddc364cc-7a6a-451e-a808-90cdd5848570}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\rx63n">
+      <UniqueIdentifier>{f5b10b76-28c9-459b-9fea-a36092f27fda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\rx63n\make">
+      <UniqueIdentifier>{47ce5be0-5754-4473-a713-03228467129a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\rx63n\startup">
+      <UniqueIdentifier>{145ad14c-97bb-4f35-b080-b38e0b3694be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\bcm2835_raspi_b">
+      <UniqueIdentifier>{4041bfb9-b914-4b7c-a460-4ea024a343cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\bcm2835_raspi_b\make">
+      <UniqueIdentifier>{d1060f48-ad53-4ceb-a846-299be0b751c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\bcm2835_raspi_b\startup">
+      <UniqueIdentifier>{1f5312f0-2137-4a89-aee2-60f6c6f08196}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\stm32l152">
+      <UniqueIdentifier>{48e4e3af-5a25-4777-bbfa-f06de0ac5b11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\stm32l152\make">
+      <UniqueIdentifier>{3c04b9e0-3b54-4c27-bb43-67ba9d9082ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\stm32l152\startup">
+      <UniqueIdentifier>{8390d2aa-8970-46fb-a030-12003da78359}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\atmega2560">
+      <UniqueIdentifier>{981e5c20-1cb2-47d6-8987-7a6ee473efff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\atmega2560\make">
+      <UniqueIdentifier>{5811fa00-3254-48e2-ad7c-1f0f728a9b7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\atmega2560\startup">
+      <UniqueIdentifier>{655b96de-d2f6-4ab9-9e37-a70ae26780a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\stm32f446">
+      <UniqueIdentifier>{376a5280-1115-42a7-897d-7f7f3bf57527}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\stm32f446\make">
+      <UniqueIdentifier>{7b2f1611-c60a-45cd-8045-db18a9dcfed3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\stm32f446\startup">
+      <UniqueIdentifier>{a80ed04d-f118-4417-82bb-954d4a5faf28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\xtensa32">
+      <UniqueIdentifier>{07f4f72b-d45f-439f-880d-6756cb21b73f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\xtensa32\startup">
+      <UniqueIdentifier>{53e83863-577c-4d22-8e58-93f6c9f2c1f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\lpc11c24">
+      <UniqueIdentifier>{1bcdbfbf-86cd-4aee-ae23-4d7d5ed9cad2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\lpc11c24\make">
+      <UniqueIdentifier>{1118c3fd-f0c2-4520-aaec-d3e3371c90aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\lpc11c24\startup">
+      <UniqueIdentifier>{3f300f03-33a2-470e-928e-dc620fd5485f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\x86_64-w64-mingw32">
+      <UniqueIdentifier>{73125d5a-08cb-4db7-906c-eec7d4cdb72f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\x86_64-w64-mingw32\make">
+      <UniqueIdentifier>{b8efd83a-7cd5-4ba7-82b4-763bdc2c567f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\x86_64-w64-mingw32\startup">
+      <UniqueIdentifier>{80cb37c7-9856-4bf9-8bc4-2b91611ab9f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\xtensa32\make">
+      <UniqueIdentifier>{dd0fe2a6-0b42-4cee-a106-84f66171e078}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\stm32l100c">
+      <UniqueIdentifier>{0399d925-ef3d-49da-b726-10b72de92f18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\stm32l100c\make">
+      <UniqueIdentifier>{2c2a4e67-a3d2-495c-a5c3-41d7ce86329e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\stm32l100c\startup">
+      <UniqueIdentifier>{99d996cc-6d36-4b80-b627-519672f5e94f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\bcm2835_raspi_b\startup\SD_CARD">
+      <UniqueIdentifier>{c2f430f9-0b5e-4a53-84e8-81546089efe1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\bcm2835_raspi_b\startup\SD_CARD\PiZero">
+      <UniqueIdentifier>{a32f6b71-97b1-472a-8d7b-9e0ca74c54d6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="target\app\make\app_files.gmk">
+      <Filter>app\make</Filter>
+    </None>
+    <None Include="target\app\make\app_make.gmk">
+      <Filter>app\make</Filter>
+    </None>
+    <None Include="target\app\make\app_rules.gmk">
+      <Filter>app\make</Filter>
+    </None>
+    <None Include="target\build\build.bat">
+      <Filter>build</Filter>
+    </None>
+    <None Include="target\micros\avr\make\avr.ld">
+      <Filter>micros\avr\make</Filter>
+    </None>
+    <None Include="target\micros\avr\make\avr_files.gmk">
+      <Filter>micros\avr\make</Filter>
+    </None>
+    <None Include="target\micros\avr\make\avr_flags.gmk">
+      <Filter>micros\avr\make</Filter>
+    </None>
+    <None Include="target\micros\stm32f100\make\stm32f100.ld">
+      <Filter>micros\stm32f100\make</Filter>
+    </None>
+    <None Include="Target\Micros\AVR\Startup\crt0.cpp">
+      <Filter>micros\avr\startup</Filter>
+    </None>
+    <None Include="Target\Micros\AVR\Startup\crt1.cpp">
+      <Filter>micros\avr\startup</Filter>
+    </None>
+    <None Include="Target\Micros\AVR\Startup\crt0_init_ram.cpp">
+      <Filter>micros\avr\startup</Filter>
+    </None>
+    <None Include="target\micros\am335x\make\am335x_files.gmk">
+      <Filter>micros\am335x\make</Filter>
+    </None>
+    <None Include="target\micros\am335x\make\am335x_flags.gmk">
+      <Filter>micros\am335x\make</Filter>
+    </None>
+    <None Include="target\micros\am335x\make\am335x.ld">
+      <Filter>micros\am335x\make</Filter>
+    </None>
+    <None Include="target\micros\stm32f407\make\stm32f407.ld">
+      <Filter>micros\stm32f407\make</Filter>
+    </None>
+    <None Include="target\micros\stm32f407\make\stm32f407_files.gmk">
+      <Filter>micros\stm32f407\make</Filter>
+    </None>
+    <None Include="target\micros\stm32f407\make\stm32f407_flags.gmk">
+      <Filter>micros\stm32f407\make</Filter>
+    </None>
+    <None Include="target\micros\rl78\make\rl78.ld">
+      <Filter>micros\rl78\make</Filter>
+    </None>
+    <None Include="target\micros\rl78\make\rl78_files.gmk">
+      <Filter>micros\rl78\make</Filter>
+    </None>
+    <None Include="target\micros\rl78\make\rl78_flags.gmk">
+      <Filter>micros\rl78\make</Filter>
+    </None>
+    <None Include="target\micros\stm32f429\make\stm32f429.ld">
+      <Filter>micros\stm32f429\make</Filter>
+    </None>
+    <None Include="target\micros\stm32f429\make\stm32f429_files.gmk">
+      <Filter>micros\stm32f429\make</Filter>
+    </None>
+    <None Include="target\micros\stm32f429\make\stm32f429_flags.gmk">
+      <Filter>micros\stm32f429\make</Filter>
+    </None>
+    <None Include="target\micros\stm32f100\make\stm32f100_files.gmk">
+      <Filter>micros\stm32f100\make</Filter>
+    </None>
+    <None Include="target\micros\stm32f100\make\stm32f100_flags.gmk">
+      <Filter>micros\stm32f100\make</Filter>
+    </None>
+    <None Include="target\micros\rx63n\make\rx63n.ld">
+      <Filter>micros\rx63n\make</Filter>
+    </None>
+    <None Include="target\micros\rx63n\make\rx63n_files.gmk">
+      <Filter>micros\rx63n\make</Filter>
+    </None>
+    <None Include="target\micros\rx63n\make\rx63n_flags.gmk">
+      <Filter>micros\rx63n\make</Filter>
+    </None>
+    <None Include="target\micros\bcm2835_raspi_b\make\bcm2835_raspi_b.ld">
+      <Filter>micros\bcm2835_raspi_b\make</Filter>
+    </None>
+    <None Include="target\micros\bcm2835_raspi_b\make\bcm2835_raspi_b_files.gmk">
+      <Filter>micros\bcm2835_raspi_b\make</Filter>
+    </None>
+    <None Include="target\micros\bcm2835_raspi_b\make\bcm2835_raspi_b_flags.gmk">
+      <Filter>micros\bcm2835_raspi_b\make</Filter>
+    </None>
+    <None Include="target\build\build.sh">
+      <Filter>build</Filter>
+    </None>
+    <None Include="target\app\make\app_make_linux.gmk">
+      <Filter>app\make</Filter>
+    </None>
+    <None Include="target\micros\stm32l152\make\stm32l152.ld">
+      <Filter>micros\stm32l152\make</Filter>
+    </None>
+    <None Include="target\micros\stm32l152\make\stm32l152_files.gmk">
+      <Filter>micros\stm32l152\make</Filter>
+    </None>
+    <None Include="target\micros\stm32l152\make\stm32l152_flags.gmk">
+      <Filter>micros\stm32l152\make</Filter>
+    </None>
+    <None Include="target\micros\atmega2560\make\atmega2560.ld">
+      <Filter>micros\atmega2560\make</Filter>
+    </None>
+    <None Include="target\micros\atmega2560\make\atmega2560_files.gmk">
+      <Filter>micros\atmega2560\make</Filter>
+    </None>
+    <None Include="target\micros\atmega2560\make\atmega2560_flags.gmk">
+      <Filter>micros\atmega2560\make</Filter>
+    </None>
+    <None Include="target\micros\stm32f446\make\stm32f446.ld">
+      <Filter>micros\stm32f446\make</Filter>
+    </None>
+    <None Include="target\micros\stm32f446\make\stm32f446_files.gmk">
+      <Filter>micros\stm32f446\make</Filter>
+    </None>
+    <None Include="target\micros\stm32f446\make\stm32f446_flags.gmk">
+      <Filter>micros\stm32f446\make</Filter>
+    </None>
+    <None Include="target\micros\xtensa32\make\xtensa32.ld">
+      <Filter>micros\xtensa32\make</Filter>
+    </None>
+    <None Include="target\micros\xtensa32\make\xtensa32_files.gmk">
+      <Filter>micros\xtensa32\make</Filter>
+    </None>
+    <None Include="target\micros\xtensa32\make\xtensa32_flags.gmk">
+      <Filter>micros\xtensa32\make</Filter>
+    </None>
+    <None Include="target\micros\lpc11c24\make\lpc11c24.ld">
+      <Filter>micros\lpc11c24\make</Filter>
+    </None>
+    <None Include="target\micros\lpc11c24\make\lpc11c24_files.gmk">
+      <Filter>micros\lpc11c24\make</Filter>
+    </None>
+    <None Include="target\micros\lpc11c24\make\lpc11c24_flags.gmk">
+      <Filter>micros\lpc11c24\make</Filter>
+    </None>
+    <None Include="target\micros\x86_64-w64-mingw32\make\x86_64-w64-mingw32_flags.gmk">
+      <Filter>micros\x86_64-w64-mingw32\make</Filter>
+    </None>
+    <None Include="target\micros\x86_64-w64-mingw32\make\x86_64-w64-mingw32_files.gmk">
+      <Filter>micros\x86_64-w64-mingw32\make</Filter>
+    </None>
+    <None Include="target\micros\x86_64-w64-mingw32\make\x86_64-w64-mingw32.ld">
+      <Filter>micros\x86_64-w64-mingw32\make</Filter>
+    </None>
+    <None Include="target\micros\stm32l100c\make\stm32l100c.ld">
+      <Filter>micros\stm32l100c\make</Filter>
+    </None>
+    <None Include="target\micros\stm32l100c\make\stm32l100c_files.gmk">
+      <Filter>micros\stm32l100c\make</Filter>
+    </None>
+    <None Include="target\micros\stm32l100c\make\stm32l100c_flags.gmk">
+      <Filter>micros\stm32l100c\make</Filter>
+    </None>
+    <None Include="target\micros\bcm2835_raspi_b\startup\int_vect.s">
+      <Filter>micros\bcm2835_raspi_b\startup</Filter>
+    </None>
+    <None Include="target\micros\bcm2835_raspi_b\startup\SD_CARD\PiZero\bootcode.bin">
+      <Filter>micros\bcm2835_raspi_b\startup\SD_CARD\PiZero</Filter>
+    </None>
+    <None Include="target\micros\bcm2835_raspi_b\startup\SD_CARD\PiZero\kernel.img">
+      <Filter>micros\bcm2835_raspi_b\startup\SD_CARD\PiZero</Filter>
+    </None>
+    <None Include="target\micros\bcm2835_raspi_b\startup\SD_CARD\PiZero\start.elf">
+      <Filter>micros\bcm2835_raspi_b\startup\SD_CARD\PiZero</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Target\Micros\AVR\Startup\int_vect.cpp">
+      <Filter>micros\avr\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\am335x\startup\crt0.cpp">
+      <Filter>micros\am335x\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\am335x\startup\int_vect.cpp">
+      <Filter>micros\am335x\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\am335x\startup\crt0_init_ram.cpp">
+      <Filter>micros\am335x\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\am335x\startup\crt1.cpp">
+      <Filter>micros\am335x\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\stm32f407\startup\crt0.cpp">
+      <Filter>micros\stm32f407\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\stm32f407\startup\crt0_init_ram.cpp">
+      <Filter>micros\stm32f407\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\stm32f407\startup\crt1.cpp">
+      <Filter>micros\stm32f407\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\stm32f407\startup\int_vect.cpp">
+      <Filter>micros\stm32f407\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\rl78\startup\crt0.cpp">
+      <Filter>micros\rl78\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\rl78\startup\crt0_init_ram.cpp">
+      <Filter>micros\rl78\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\rl78\startup\crt1.cpp">
+      <Filter>micros\rl78\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\rl78\startup\int_vect.cpp">
+      <Filter>micros\rl78\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\stm32f429\startup\crt0.cpp">
+      <Filter>micros\stm32f429\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\stm32f429\startup\crt0_init_ram.cpp">
+      <Filter>micros\stm32f429\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\stm32f429\startup\crt1.cpp">
+      <Filter>micros\stm32f429\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\stm32f429\startup\int_vect.cpp">
+      <Filter>micros\stm32f429\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\stm32f100\startup\crt0.cpp">
+      <Filter>micros\stm32f100\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\stm32f100\startup\crt0_init_ram.cpp">
+      <Filter>micros\stm32f100\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\stm32f100\startup\crt1.cpp">
+      <Filter>micros\stm32f100\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\stm32f100\startup\int_vect.cpp">
+      <Filter>micros\stm32f100\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\rx63n\startup\crt0.cpp">
+      <Filter>micros\rx63n\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\rx63n\startup\crt0_init_ram.cpp">
+      <Filter>micros\rx63n\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\rx63n\startup\crt1.cpp">
+      <Filter>micros\rx63n\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\rx63n\startup\int_vect.cpp">
+      <Filter>micros\rx63n\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\rl78\startup\option.cpp">
+      <Filter>micros\rl78\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\bcm2835_raspi_b\startup\crt0.cpp">
+      <Filter>micros\bcm2835_raspi_b\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\bcm2835_raspi_b\startup\crt0_init_ram.cpp">
+      <Filter>micros\bcm2835_raspi_b\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\bcm2835_raspi_b\startup\crt1.cpp">
+      <Filter>micros\bcm2835_raspi_b\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\stm32l152\startup\crt0.cpp">
+      <Filter>micros\stm32l152\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\stm32l152\startup\crt0_init_ram.cpp">
+      <Filter>micros\stm32l152\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\stm32l152\startup\crt1.cpp">
+      <Filter>micros\stm32l152\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\stm32l152\startup\int_vect.cpp">
+      <Filter>micros\stm32l152\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\atmega2560\startup\crt0.cpp">
+      <Filter>micros\atmega2560\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\atmega2560\startup\crt0_init_ram.cpp">
+      <Filter>micros\atmega2560\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\atmega2560\startup\crt1.cpp">
+      <Filter>micros\atmega2560\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\atmega2560\startup\int_vect.cpp">
+      <Filter>micros\atmega2560\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\stm32f446\startup\crt0.cpp">
+      <Filter>micros\stm32f446\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\stm32f446\startup\crt0_init_ram.cpp">
+      <Filter>micros\stm32f446\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\stm32f446\startup\crt1.cpp">
+      <Filter>micros\stm32f446\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\stm32f446\startup\int_vect.cpp">
+      <Filter>micros\stm32f446\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\xtensa32\startup\crt0.cpp">
+      <Filter>micros\xtensa32\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\xtensa32\startup\crt0_init_ram.cpp">
+      <Filter>micros\xtensa32\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\xtensa32\startup\crt1.cpp">
+      <Filter>micros\xtensa32\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\xtensa32\startup\int_vect.cpp">
+      <Filter>micros\xtensa32\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\lpc11c24\startup\crt0.cpp">
+      <Filter>micros\lpc11c24\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\lpc11c24\startup\crt0_init_ram.cpp">
+      <Filter>micros\lpc11c24\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\lpc11c24\startup\crt1.cpp">
+      <Filter>micros\lpc11c24\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\lpc11c24\startup\int_vect.cpp">
+      <Filter>micros\lpc11c24\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\stm32l100c\startup\crt0.cpp">
+      <Filter>micros\stm32l100c\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\stm32l100c\startup\crt0_init_ram.cpp">
+      <Filter>micros\stm32l100c\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\stm32l100c\startup\crt1.cpp">
+      <Filter>micros\stm32l100c\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\stm32l100c\startup\int_vect.cpp">
+      <Filter>micros\stm32l100c\startup</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="target\micros\bcm2835_raspi_b\startup\SD_CARD\PiZero\config.txt">
+      <Filter>micros\bcm2835_raspi_b\startup\SD_CARD\PiZero</Filter>
+    </Text>
+  </ItemGroup>
+</Project>

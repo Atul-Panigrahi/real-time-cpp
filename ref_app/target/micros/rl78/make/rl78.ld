@@ -4,23 +4,23 @@ INPUT(libc.a libm.a libgcc.a)
 OUTPUT_ARCH(rl78)
 
 /* The beginning and end of the program ROM area */
-_rom_begin = 0x002000;
-_rom_end   = 0x00FFFC;
+__rom_begin = 0x002000;
+__rom_end   = 0x00FFFC;
 
 /* The beginning and end (i.e., top) of the stack */
 /* Set up a stack with a size of 1K */
-_stack_begin = 0x0FFAE0;
-_stack_end   = 0x0FFEE0;
+__stack_begin = 0x0FFAE0;
+__stack_end   = 0x0FFEE0;
 
 __initial_stack_pointer = 0x0FFEE0;
 
 MEMORY
 {
-  IVEC (r)  : ORIGIN = 0x000000, LENGTH = 0x00080
-  OPT (r)   : ORIGIN = 0x0000C0, LENGTH = 0x00004
-  ROM (r)   : ORIGIN = 0x002000, LENGTH = 0x0DFFC
-  RAM (w)   : ORIGIN = 0x0FEF00, LENGTH = 0x00500
-  STACK (w) : ORIGIN = 0x0FFEE0, LENGTH = 0x00002
+  IVEC (rx)  : ORIGIN = 0x000000, LENGTH = 0x00080
+  OPT  (r)   : ORIGIN = 0x0000C0, LENGTH = 0x00004
+  ROM  (rx)  : ORIGIN = 0x002000, LENGTH = 0x0DFFC
+  RAM  (rw)  : ORIGIN = 0x0FEF00, LENGTH = 0x00500
+  STACK(rw)  : ORIGIN = 0x0FFEE0, LENGTH = 0x00002
 }
 
 SECTIONS
@@ -31,9 +31,10 @@ SECTIONS
   {
     KEEP(*(.ivec))
   } > IVEC
-  .opt :
+
+  .opt_bytes :
   {
-    KEEP(*(.opt))
+    KEEP(*(.opt_bytes))
   } > OPT
 
   /* Program code (text), ISR vectors, read-only data and static ctors */
@@ -50,12 +51,12 @@ SECTIONS
     . = ALIGN(2);
     *(.rodata*)
     . = ALIGN(2);
-    _ctors_begin = .;
+    __ctors_begin = .;
     KEEP (*(SORT(.ctors.*)))
     . = ALIGN(2);
     KEEP (*(.ctors))
     . = ALIGN(2);
-    _ctors_end = .;
+    __ctors_end = .;
   } > ROM
 
   . = 0x0FEF00;
@@ -64,25 +65,25 @@ SECTIONS
   .data :
   {
     . = ALIGN(2);
-    _data_begin = . ;
+    __data_begin = . ;
     *(.data)
     . = ALIGN(2);
     *(.data.*)
     . = ALIGN(2);
-    _data_end = . ;
+    __data_end = . ;
   } > RAM AT > ROM
 
   /* The uninitialized (zero-cleared) data section */
   .bss :
   {
     . = ALIGN(2);
-    _bss_begin = .;
+    __bss_begin = .;
     *(.bss)
     . = ALIGN(2);
     *(.bss*)
     . = ALIGN(2);
-    _bss_end = . ;
+    __bss_end = . ;
   } > RAM
 
-  _rom_data_begin = LOADADDR(.data);
+  __rom_data_begin = LOADADDR(.data);
 }
