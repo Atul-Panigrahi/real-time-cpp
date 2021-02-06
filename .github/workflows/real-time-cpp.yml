@@ -1,0 +1,318 @@
+##############################################################################
+#  Copyright Christopher Kormanyos 2021.
+#  Distributed under the Boost Software License,
+#  Version 1.0. (See accompanying file LICENSE_1_0.txt
+#  or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+name: real-time-cpp
+on: [push,pull_request]
+jobs:
+  target-avr:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [ avr, atmega2560 ]
+    if: "!contains(github.event.commits[0].message, '[CI SKIP]')"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - name: update-tools
+        run: sudo apt install gcc-avr avr-libc
+      - name: target-avr-${{ matrix.suite }}
+        run: |
+          ./target/build/build.sh ${{ matrix.suite }} rebuild
+          ls -la ./bin/ref_app.hex ./bin/ref_app.map
+        working-directory: ./ref_app/
+  target-avr-cmake:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [ avr, atmega2560 ]
+    if: "!contains(github.event.commits[0].message, '[CI SKIP]')"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - name: update-tools
+        run: sudo apt install gcc-avr avr-libc
+      - name: target-avr-cmake-${{ matrix.suite }}
+        run: |
+          mkdir build
+          cd build
+          cmake ../ref_app -DTRIPLE=avr -DTARGET=${{ matrix.suite }} -DCMAKE_TOOLCHAIN_FILE=../ref_app/cmake/gcc-toolchain.cmake
+          make -j ref_app
+          ls -la ref_app.hex ref_app.map
+        working-directory: ./
+  target-avr-example_led:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        example: [ chapter02_02, chapter02_06 ]
+    if: "!contains(github.event.commits[0].message, '[CI SKIP]')"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - name: update-tools
+        run: sudo apt install gcc-avr avr-libc
+      - name: target-avr-example_led
+        run: |
+          cd ${{ matrix.example }}
+          ./build.sh /usr/bin avr
+          ls -la ./bin/led.elf ./bin/led.map ./bin/led.hex
+        working-directory: ./examples/
+        shell: bash
+  target-avr-examples:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        example: [ chapter02_03, chapter02_03a, chapter03_02, chapter04_04, chapter04_04a, chapter06_01, chapter06_14, chapter09_07, chapter09_08, chapter12_04, chapter17_03, chapter17_03a ]
+    if: "!contains(github.event.commits[0].message, '[CI SKIP]')"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - name: update-tools
+        run: sudo apt install gcc-avr avr-libc
+      - name: target-avr-examples
+        run: |
+          cd ${{ matrix.example }}
+          ./build.sh /usr/bin avr
+          ls -la ./bin/${{ matrix.example }}.elf ./bin/${{ matrix.example }}.map ./bin/${{ matrix.example }}.hex
+        working-directory: ./examples/
+  target-msvc-examples:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: pwsh
+    strategy:
+      fail-fast: false
+      matrix:
+        example: [ chapter02_03, chapter02_03a, chapter03_02, chapter04_04, chapter04_04a, chapter06_01, chapter06_14, chapter09_07, chapter09_08, chapter12_04, chapter17_03, chapter17_03a ]
+    if: "!contains(github.event.commits[0].message, '[CI SKIP]')"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - name: target-msvc-examples
+        env:
+          PATH: '${env:PATH};C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\amd64'
+        run: |
+          cd ${{ matrix.example }}
+          MSBuild -m ${{ matrix.example }}.sln -p:Configuration=Release -p:Platform=x64 /t:Rebuild
+          dir ./Release/${{ matrix.example }}.exe
+        working-directory: ./examples/
+  target-arm:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [ am335x, bcm2835_raspi_b, lpc11c24, stm32f100, stm32f407, stm32f429, stm32f446, stm32l100c, stm32l152 ]
+    if: "!contains(github.event.commits[0].message, '[CI SKIP]')"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - name: update-tools
+        run: sudo apt install gcc-arm-none-eabi
+      - name: target-arm-${{ matrix.suite }}
+        run: |
+          ./target/build/build.sh ${{ matrix.suite }} rebuild
+          ls -la ./bin/ref_app.hex ./bin/ref_app.map
+        working-directory: ./ref_app/
+  target-arm-cmake:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [ bcm2835_raspi_b, lpc11c24, stm32f100, stm32f407, stm32f429, stm32f446, stm32l100c, stm32l152 ]
+    if: "!contains(github.event.commits[0].message, '[CI SKIP]')"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - name: update-tools
+        run: sudo apt install gcc-arm-none-eabi
+      - name: target-arm-cmake-${{ matrix.suite }}
+        run: |
+          mkdir build
+          cd build
+          cmake ../ref_app -DTRIPLE=arm-none-eabi -DTARGET=${{ matrix.suite }} -DCMAKE_TOOLCHAIN_FILE=../ref_app/cmake/gcc-toolchain.cmake
+          make -j ref_app
+          ls -la ref_app.hex ref_app.map
+        working-directory: ./
+  target-x86_64:
+    runs-on: ubuntu-20.04
+    if: "!contains(github.event.commits[0].message, '[CI SKIP]')"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - name: build-target-x86_64-w64-mingw32
+        run: |
+          ./target/build/build.sh x86_64-w64-mingw32 rebuild
+          ls ./bin/ref_app.exe
+        working-directory: ./ref_app/
+        shell: bash
+  target-host-cmake:
+    runs-on: ubuntu-20.04
+    if: "!contains(github.event.commits[0].message, '[CI SKIP]')"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - name: build-target-host
+        run: |
+          mkdir build
+          cd build
+          cmake ../ref_app -DTARGET=host -DCMAKE_TOOLCHAIN_FILE=../ref_app/cmake/gcc-toolchain.cmake
+          make -j ref_app
+          ls ref_app.exe ref_app.map
+        working-directory: ./
+        shell: bash
+  msvc-release:
+    runs-on: windows-latest
+    if: "!contains(github.event.commits[0].message, '[CI SKIP]')"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - name: build-msvc-release
+        shell: pwsh
+        env:
+          PATH: '${env:PATH};C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\amd64'
+        run: |
+          MSBuild -m ref_app.sln -p:Configuration=Release -p:Platform=x64 /t:Rebuild
+          dir ./tmp/Release/ref_app.exe
+        working-directory: ./ref_app/
+  msvc-debug:
+    runs-on: windows-latest
+    if: "!contains(github.event.commits[0].message, '[CI SKIP]')"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - name: build-msvc-debug
+        shell: pwsh
+        env:
+          PATH: '${env:PATH};C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\amd64'
+        run: |
+          MSBuild -m ref_app.sln -p:Configuration=Debug -p:Platform=x64 /t:Rebuild
+          dir ./tmp/Debug/ref_app.exe
+        working-directory: ./ref_app/
+  benchmark_gcc-clang-8-9:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [ g++, g++-8, g++-9, clang++, clang++-8, clang++-9 ]
+        standard: [ c++11, c++14, c++17, c++2a ]
+    if: "!contains(github.event.commits[0].message, '[CI SKIP]')"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - name: update-tools
+        run: sudo apt install gcc-8 gcc-9 clang clang-8 clang-9
+      - name: benchmark_gcc-clang-8-9
+        run: ./target/build/test_app_benchmarks.sh ${{ matrix.compiler }} ${{ matrix.standard }}
+        working-directory: ./ref_app/
+  benchmark_gcc-clang-10:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [ g++-10, clang++-10 ]
+        standard: [ c++11, c++14, c++17, c++20 ]
+    if: "!contains(github.event.commits[0].message, '[CI SKIP]')"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - name: update-tools
+        run: sudo apt install gcc-10 clang-10
+      - name: benchmark_gcc-clang-10
+        run: ./target/build/test_app_benchmarks.sh ${{ matrix.compiler }} ${{ matrix.standard }}
+        working-directory: ./ref_app/
+  benchmark_apple-clang:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [ clang++ ]
+        standard: [ c++11, c++14, c++17, c++2a ]
+    if: "!contains(github.event.commits[0].message, '[CI SKIP]')"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - name: benchmark_apple-clang
+        run: ./target/build/test_app_benchmarks.sh ${{ matrix.compiler }} ${{ matrix.standard }}
+        working-directory: ./ref_app/
+  benchmark_builds-avr:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        standard: [ c++11, c++14 ]
+    if: "!contains(github.event.commits[0].message, '[CI SKIP]')"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - name: update-tools
+        run: sudo apt install gcc-avr avr-libc
+      - name: benchmark_builds-avr
+        run: ./target/build/test_app_benchmarks_avr.sh ${{ matrix.standard }}
+        working-directory: ./ref_app/
+  benchmark_builds-stm32f446:
+    runs-on: ubuntu-20.04
+    defaults:
+      run:
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        standard: [ c++11, c++14, c++17 ]
+    if: "!contains(github.event.commits[0].message, '[CI SKIP]')"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - name: update-tools
+        run: sudo apt install gcc-arm-none-eabi
+      - name: benchmark_builds-stm32f446
+        run: ./target/build/test_app_benchmarks_stm32f446.sh ${{ matrix.standard }}
+        working-directory: ./ref_app/

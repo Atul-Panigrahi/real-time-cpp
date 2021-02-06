@@ -15,15 +15,20 @@ GCC_PREFIX    =
 
 TGT_SUFFIX    = exe
 
-TGT_CFLAGS    = -O3                                            \
+TGT_ALLFLAGS  = -O2                                            \
                 -finline-functions                             \
                 -finline-limit=32                              \
-                -march=native                                  \
-                -mtune=native
+                -pthread                                       \
+                -lpthread
 
-TGT_CPPFLAGS  = -std=c++11
+TGT_CFLAGS    = -std=c99                                       \
+                -Wunsuffixed-float-constants                   \
+                $(TGT_ALLFLAGS)
 
-TGT_INCLUDES  = -I$(PATH_APP)/util/STL_C++XX_stdfloat
+TGT_CXXFLAGS  = -std=c++11                                     \
+                $(TGT_ALLFLAGS)
+
+TGT_INCLUDES  =
 
 TGT_AFLAGS    =
 

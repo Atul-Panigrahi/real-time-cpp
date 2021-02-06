@@ -1,3 +1,9 @@
+##############################################################################
+#  Copyright Christopher Kormanyos 2021.
+#  Distributed under the Boost Software License,
+#  Version 1.0. (See accompanying file LICENSE_1_0.txt
+#  or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 #
 # MIT License
 #
@@ -22,31 +28,26 @@
 # SOFTWARE.
 #
 
-set(APP MLO)
+set(APP ref_app)
 
 set(CMAKE_EXECUTABLE_SUFFIX "")
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
 
 set(TARGET_INCLUDES
-    ${PATH_APP}/util/STL_C++XX_stdfloat
     ${PATH_APP}/util/STL
 )
 
 set(_TARGET_CFLAGS
     -finline-functions
-    -finline-limit=16
-    -ffast-math
-    -mcpu=cortex-a8
+    -finline-limit=32
     -march=armv7-a
     -mtune=cortex-a8
     -marm
     -mfloat-abi=hard
     -mfpu=neon
     -ffast-math
-    -mno-unaligned-access
-    -mno-long-calls
 )
 
 set(TARGET_AFLAGS "")
@@ -65,8 +66,6 @@ set(FILES_TARGET
     ${PATH_APP}/mcal/mcal_gcc_cxx_completion
     ${PATH_APP}/mcal/${TARGET}/mcal_cpu_detail
     ${PATH_APP}/mcal/${TARGET}/mcal_cpu_detail_secure
-    ${PATH_APP}/util/STD_LIBC/memory
-    ${PATH_APP}/util/STL/impl/arm/arm_float_limits
     ${PATH_APP}/util/STL/impl/cmath_impl_gamma
     ${PATH_APP}/util/STL/impl/cmath_impl_hyperbolic
     ${PATH_TGT}/startup/crt0

@@ -1,3 +1,9 @@
+##############################################################################
+#  Copyright Christopher Kormanyos 2021.
+#  Distributed under the Boost Software License,
+#  Version 1.0. (See accompanying file LICENSE_1_0.txt
+#  or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 #
 # MIT License
 #
@@ -22,28 +28,26 @@
 # SOFTWARE.
 #
 
-set(APP kernel)
+set(APP ref_app)
 
 set(CMAKE_EXECUTABLE_SUFFIX .elf)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
 
 set(TARGET_INCLUDES
-    ${PATH_APP}/util/STL_C++XX_stdfloat
     ${PATH_APP}/util/STL
 )
 
 set(_TARGET_CFLAGS
     -finline-functions
-    -finline-limit=16
-    -ffast-math
+    -finline-limit=32
     -march=armv6zk
     -mtune=arm1176jzf-s
     -marm
-    -mfloat-abi=soft
-    -mno-unaligned-access
-    -mno-long-calls
+    -mfpu=vfpv2
+    -mfloat-abi=hard
+    -ffast-math
 )
 
 set(TARGET_AFLAGS "")
@@ -60,13 +64,13 @@ string(REPLACE ";" " " TARGET_LDFLAGS "${_TARGET_LDFLAGS}")
 
 set(FILES_TARGET
     ${PATH_APP}/mcal/mcal_gcc_cxx_completion
-    ${PATH_APP}/util/STD_LIBC/memory
-    ${PATH_APP}/util/STL/impl/arm/arm_float_limits
+    ${PATH_APP}/mcal/${TARGET}/mcal_cpu_detail
+    ${PATH_APP}/mcal/${TARGET}/mcal_cpu_detail_secure.s
+    ${PATH_APP}/mcal/${TARGET}/mcal_reg.s
     ${PATH_APP}/util/STL/impl/cmath_impl_gamma
     ${PATH_APP}/util/STL/impl/cmath_impl_hyperbolic
     ${PATH_TGT}/startup/crt0
     ${PATH_TGT}/startup/crt0_init_ram
     ${PATH_TGT}/startup/crt1
-    ${PATH_TGT}/startup/int_vect
-    ${PATH_TGT}/startup/int_vect_table.s
+    ${PATH_TGT}/startup/int_vect.s
 )

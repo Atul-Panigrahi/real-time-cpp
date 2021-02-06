@@ -1,3 +1,9 @@
+##############################################################################
+#  Copyright Christopher Kormanyos 2021.
+#  Distributed under the Boost Software License,
+#  Version 1.0. (See accompanying file LICENSE_1_0.txt
+#  or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 #
 # MIT License
 #
@@ -24,18 +30,12 @@
 
 set(APP ref_app)
 
-if(MINGW OR MSVC OR CYGWIN)
-    set(CMAKE_EXECUTABLE_SUFFIX .exe)
-else()
-    set(CMAKE_EXECUTABLE_SUFFIX "")
-endif()
+set(CMAKE_EXECUTABLE_SUFFIX .exe)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
 
-set(TARGET_INCLUDES
-    ${PATH_APP}/util/STL_C++XX_stdfloat
-)
+set(TARGET_INCLUDES)
 
 if ((CMAKE_CXX_COMPILER_ID MATCHES "AppleClang") OR 
     (CMAKE_CXX_COMPILER_ID MATCHES "Clang"))
@@ -46,7 +46,9 @@ if ((CMAKE_CXX_COMPILER_ID MATCHES "AppleClang") OR
 
     set(TARGET_AFLAGS "")
 
-    set(_TARGET_LDFLAGS -pthread)
+    set(_TARGET_LDFLAGS -pthread
+                        -lpthread
+    )
 
 else()
 
@@ -61,7 +63,9 @@ else()
 
         set(TARGET_AFLAGS "")
 
-        set(_TARGET_LDFLAGS -pthread)
+        set(_TARGET_LDFLAGS -pthread
+                            -lpthread
+        )
 
     else()
 

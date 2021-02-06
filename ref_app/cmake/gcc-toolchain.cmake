@@ -1,3 +1,9 @@
+##############################################################################
+#  Copyright Christopher Kormanyos 2021.
+#  Distributed under the Boost Software License,
+#  Version 1.0. (See accompanying file LICENSE_1_0.txt
+#  or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 #
 # MIT License
 #
@@ -116,12 +122,11 @@ set(_CFLAGS ${GCCFLAGS}
     -std=c99
 )
 
-set(_CPPFLAGS ${GCCFLAGS}
+set(_CXXFLAGS ${GCCFLAGS}
     -x c++
     -fno-rtti
-    -fstrict-enums
     -fno-use-cxa-atexit
-    -fno-use-cxa-get-exception-ptr
+    -fno-exceptions
     -fno-nonansi-builtins
     -fno-threadsafe-statics
     -fno-enforce-eh-specs
@@ -154,6 +159,6 @@ set(BIN_FILE ${CMAKE_BINARY_DIR}/${APP}.bin)
 
 # remove list item delimeter
 string(REPLACE ";" " " CFLAGS "${_CFLAGS}")
-string(REPLACE ";" " " CPPFLAGS "${_CPPFLAGS}")
+string(REPLACE ";" " " CXXFLAGS "${_CXXFLAGS}")
 string(REPLACE ";" " " AFLAGS "${_AFLAGS}")
 string(REPLACE ";" " " LDFLAGS "${_LDFLAGS}")

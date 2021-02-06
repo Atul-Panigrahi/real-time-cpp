@@ -9,30 +9,149 @@
 # compiler flags for the target architecture
 # ------------------------------------------------------------------------------
 
-# http://vivonomicon.com/2019/03/30/getting-started-with-bare-metal-esp32-programming
-# http://github.com/espressif/esp-idf
 
-GCC_VERSION   = 8.2.0
+GCC_VERSION   = 8.4.0
 GCC_TARGET    = xtensa-esp32-elf
 GCC_PREFIX    = xtensa-esp32-elf
 
 TGT_SUFFIX    = elf
 
-TGT_CFLAGS    = -Os                                                            \
+WARN_FLAGS   := -Wall                                                         \
+                -Wpointer-arith                                               \
+                -Wno-maybe-uninitialized                                      \
+                -Wno-unused-function                                          \
+                -Wno-unused-but-set-variable                                  \
+                -Wno-unused-variable                                          \
+                -Wno-deprecated-declarations                                  \
+                -Wno-unused-parameter                                         \
+                -Wno-unused-but-set-parameter                                 \
+                -Wno-missing-field-initializers                               \
+                -Wno-sign-compare
+
+DEFINES_SDK  := -DESP_PLATFORM                                                  \
+                "-DMBEDTLS_CONFIG_FILE=$(DQUOTE)mbedtls/esp_config.h$(DQUOTE)"  \
+                -DHAVE_CONFIG_H                                                 \
+                -DGCC_NOT_5_2_0=1                                               \
+                -DF_CPU=240000000L                                              \
+                -DESP32                                                         \
+                -DCORE_DEBUG_LEVEL=0
+
+TGT_ALLFLAGS  = -Os                                                            \
+                -nostdlib                                                      \
                 -finline-functions                                             \
                 -finline-limit=32                                              \
-                -ffast-math                                                    \
-                -mlongcalls                                                    \
                 -fstack-protector                                              \
-                -fstrict-volatile-bitfields
+                -fstrict-volatile-bitfields                                    \
+                -mlongcalls                                                    \
+                $(FLAGS_SDK)                                                   \
+                $(DEFINES_SDK)
 
-TGT_CPPFLAGS  = -std=c++11
+TGT_CFLAGS    = -std=gnu99                                                     \
+                -nostdlib                                                      \
+                -Wno-unsuffixed-float-constants                                \
+                -Wno-old-style-declaration                                     \
+                $(TGT_ALLFLAGS)
 
-TGT_INCLUDES  = -I$(PATH_APP)/util/STL_C++XX_stdfloat                          \
-                -I$(PATH_APP)/util/STL
+TGT_CXXFLAGS  = -std=c++11                                                     \
+                $(TGT_ALLFLAGS)
+
+TGT_INCLUDES  = -I$(PATH_APP)/util/STL
 
 TGT_AFLAGS    =
 
-TGT_LDFLAGS   = -nostdlib                                      \
-                -nostartfiles                                  \
-                -T $(LINKER_DEFINITION_FILE)
+SDK_LIBS      = -lapp_update                    \
+                -lbootloader_support            \
+                -lcoexist                       \
+                -ldriver                        \
+                -lefuse                         \
+                -lesp_ringbuf                   \
+                -lesp32                         \
+                -lexpat                         \
+                -lfreertos                      \
+                -lhal                           \
+                -lheap                          \
+                -llog                           \
+                -lnewlib                        \
+                -lnvs_flash                     \
+                -lpthread                       \
+                -lsoc                           \
+                -lspi_flash                     \
+                -lvfs                           \
+                -lxtensa-debug-module
+
+TGT_LDFLAGS   = -nostdlib                                                               \
+                -L$(PATH_TGT_MAKE)/from_sdk/lib                                         \
+                -L$(PATH_TGT_MAKE)/from_sdk/ld                                          \
+                -T esp32_out.ld                                                         \
+                -T esp32.project.ld                                                     \
+                -T esp32.rom.ld                                                         \
+                -T esp32.peripherals.ld                                                 \
+                -T esp32.rom.libgcc.ld                                                  \
+                -T esp32.rom.spiram_incompatible_fns.ld                                 \
+                -u ld_include_panic_highint_hdl                                         \
+                -u call_user_start_cpu0                                                 \
+                -Wl,--gc-sections                                                       \
+                -Wl,--undefined=uxTopUsedPriority                                       \
+                -u __cxa_guard_dummy                                                    \
+                -u __cxx_fatal_exception                                                \
+                -Wl,--start-group                                                       \
+                -lstdc++                                                                \
+                -lcxx                                                                   \
+                -lc                                                                     \
+                $(SDK_LIBS)                                                             \
+                -Wl,--end-group                                                         \
+                -Wl,-EL
+
+
+# copy "C:\\Program Files (x86)\\Arduino\\hardware\\espressif\\esp32\\tools\\partitions\\default.csv" "C:\\Users\\User\\AppData\\Local\\Temp\\arduino_build_946943\\partitions.csv"
+# C:\Program Files (x86)\Arduino\hardware\espressif\esp32\tools\gen_esp32part.exe -q "C:\\Users\\User\\AppData\\Local\\Temp\\arduino_build_946943/partitions.csv" "C:\\Users\\User\\AppData\\Local\\Temp\\arduino_build_946943/Blink.ino.partitions.bin"
+# C:\Program Files (x86)\Arduino\hardware\espressif\esp32\tools\esptool\esptool.exe --chip esp32 --port COM7 --baud 115200 --before default_reset --after hard_reset write_flash -z --flash_mode dio --flash_freq 80m --flash_size detect 0xe000 C:\Program Files (x86)\Arduino\hardware\espressif\esp32/tools/partitions/boot_app0.bin 0x1000 C:\Program Files (x86)\Arduino\hardware\espressif\esp32/tools/sdk/bin/bootloader_qio_80m.bin 0x10000 C:\Users\User\AppData\Local\Temp\arduino_build_746296/Blink.ino.bin 0x8000 C:\Users\User\AppData\Local\Temp\arduino_build_746296/Blink.ino.partitions.bin
+
+
+# TBD: ESP tool commands use WinDOS commands. Are there *nix equivalents?
+
+ESP32_GEN_PART                 = $(PATH_TOOLS)/espressif/esp32/tools/gen_esp32part.exe
+ESP32_ESP_TOOL                 = $(PATH_TOOLS)/espressif/esp32/tools/esptool/esptool.exe
+
+
+ESP32_ESP_TOOL_FLAGS_IMAG      = --chip esp32                         \
+                                 elf2image                            \
+                                 --flash_mode dio                     \
+                                 --flash_freq 80m                     \
+                                 --flash_size 4MB                     \
+                                 -o $(APP).image.bin                  \
+                                 $(APP).elf
+
+ESP32_ESP_TOOL_FLAGS_PROG      = --chip esp32                         \
+                                 --port COM7                          \
+                                 --baud 115200                        \
+                                 --before default_reset               \
+                                 --after hard_reset write_flash       \
+                                 -z                                   \
+                                 --flash_mode dio                     \
+                                 --flash_freq 80m                     \
+                                 --flash_size detect 0xe000           \
+                                 boot_app0.bin 0x1000                 \
+                                 bootloader_qio_80m.bin 0x10000       \
+                                 $(notdir $(APP)).image.bin 0x8000    \
+                                 $(notdir $(APP)).partitions.bin
+
+# TBD: ESP tool commands use WinDOS commands. Are there *nix equivalents?
+
+RULE_SPECIAL_MAKE_IMAGE_FILE   =    $(subst /,\,$(ESP32_ESP_TOOL)) $(ESP32_ESP_TOOL_FLAGS_IMAG)                                 \
+                                 && $(subst /,\,$(ESP32_GEN_PART)) -q $(subst /,\,$(PATH_TGT)/startup/partitions.csv) $(APP).partitions.bin
+
+ESP32_ESP_TOOL_CMD_COPY_PART1  = $(CP) -f $(subst /,\,$(ESP32_GEN_PART))                          $(subst /,\,$(CURDIR)/bin) > 2 > NUL
+ESP32_ESP_TOOL_CMD_COPY_PART2  = $(CP) -f $(subst /,\,$(ESP32_ESP_TOOL))                          $(subst /,\,$(CURDIR)/bin) > 2 > NUL
+ESP32_ESP_TOOL_CMD_COPY_PART3  = $(CP) -f $(subst /,\,$(PATH_TGT)/startup/boot_app0.bin)          $(subst /,\,$(CURDIR)/bin) > 2 > NUL
+ESP32_ESP_TOOL_CMD_COPY_PART4  = $(CP) -f $(subst /,\,$(PATH_TGT)/startup/bootloader_qio_80m.bin) $(subst /,\,$(CURDIR)/bin) > 2 > NUL
+
+ESP32_ESP_TOOL_CMD_COPY        = $(shell $(ESP32_ESP_TOOL_CMD_COPY_PART1))  \
+                                 $(shell $(ESP32_ESP_TOOL_CMD_COPY_PART2))  \
+                                 $(shell $(ESP32_ESP_TOOL_CMD_COPY_PART3))  \
+                                 $(shell $(ESP32_ESP_TOOL_CMD_COPY_PART4))
+
+
+ESP32_ESP_TOOL_CMD_ECHO        = $(ECHO) esptool.exe $(ESP32_ESP_TOOL_FLAGS_PROG) > $(subst /,\,$(CURDIR)/bin/flash.bat)
+
+RULE_SPECIAL_MAKE_FLASH_BATCH := $(ESP32_ESP_TOOL_CMD_COPY) $(shell $(ESP32_ESP_TOOL_CMD_ECHO))

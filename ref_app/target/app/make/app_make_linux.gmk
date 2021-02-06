@@ -1,5 +1,5 @@
 #
-#  Copyright Christopher Kormanyos 2007 - 2019.
+#  Copyright Christopher Kormanyos 2007 - 2020.
 #  Distributed under the Boost Software License,
 #  Version 1.0. (See accompanying file LICENSE_1_0.txt
 #  or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -19,25 +19,35 @@
 
 
 # ------------------------------------------------------------------------------
+# punctuation
+# ------------------------------------------------------------------------------
+
+DQUOTE = \"
+
+# ------------------------------------------------------------------------------
 # paths
 # ------------------------------------------------------------------------------
-PATH_APP       = src
-PATH_TGT       = target/micros/$(TGT)
-PATH_APP_MAKE  = target/app/make
-PATH_TGT_MAKE  = $(PATH_TGT)/make
-PATH_BIN       = bin
-PATH_TMP       = tmp
-PATH_OBJ       = $(PATH_TMP)/obj
-PATH_LST       = $(PATH_TMP)/lst
-PATH_ERR       = $(PATH_TMP)/err
+PATH_APP             = src
+PATH_TGT             = target/micros/$(TGT)
+PATH_APP_MAKE        = target/app/make
+PATH_TGT_MAKE        = $(PATH_TGT)/make
+PATH_BIN             = bin
+PATH_TMP             = tmp
+PATH_OBJ             = $(PATH_TMP)/obj
+PATH_LST             = $(PATH_TMP)/lst
+PATH_ERR             = $(PATH_TMP)/err
 
 
 # ------------------------------------------------------------------------------
-# include files
+# standard shell tools
 # ------------------------------------------------------------------------------
-include $(PATH_APP_MAKE)/app_files.gmk      # Application file list
-include $(PATH_TGT_MAKE)/$(TGT)_files.gmk   # Target filelist
-include $(PATH_TGT_MAKE)/$(TGT)_flags.gmk   # Target compiler flags
+
+CP        = cp
+ECHO      = echo
+MAKE      = make
+MKDIR     = mkdir
+RM        = rm
+SED       = sed
 
 
 # ------------------------------------------------------------------------------
@@ -45,17 +55,32 @@ include $(PATH_TGT_MAKE)/$(TGT)_flags.gmk   # Target compiler flags
 # ------------------------------------------------------------------------------
 APP = $(PATH_BIN)/ref_app
 
-# ------------------------------------------------------------------------------
-# object files
-# ------------------------------------------------------------------------------
-FILES_TMP   = $(FILES_CPP) $(FILES_TGT)
-FILES_O     = $(addprefix $(PATH_OBJ)/, $(notdir $(addsuffix .o, $(FILES_TMP))))
+IMAGE_FILE = $(APP).bin
 
+RULE_SPECIAL_MAKE_IMAGE_FILE  =
+RULE_SPECIAL_MAKE_FLASH_BATCH =
+
+WARN_FLAGS =
 
 # ------------------------------------------------------------------------------
 # linker definition file
 # ------------------------------------------------------------------------------
 LINKER_DEFINITION_FILE   = $(PATH_TGT_MAKE)/$(TGT).ld
+
+
+# ------------------------------------------------------------------------------
+# include the target-specific make files
+# ------------------------------------------------------------------------------
+include $(PATH_APP_MAKE)/app_files.gmk      # Application file list
+include $(PATH_TGT_MAKE)/$(TGT)_files.gmk   # Target filelist
+include $(PATH_TGT_MAKE)/$(TGT)_flags.gmk   # Target compiler flags
+
+
+# ------------------------------------------------------------------------------
+# object files
+# ------------------------------------------------------------------------------
+FILES_TMP   = $(FILES_CPP) $(FILES_TGT)
+FILES_O     = $(addprefix $(PATH_OBJ)/, $(notdir $(addsuffix .o, $(FILES_TMP))))
 
 
 # ------------------------------------------------------------------------------
@@ -95,13 +120,6 @@ READELF   = $(GCC_PREFIX)-readelf
 SIZE      = $(GCC_PREFIX)-size
 endif
 
-ECHO      = echo
-MAKE      = make
-MKDIR     = mkdir
-RM        = rm
-SED       = sed
-
-
 # ------------------------------------------------------------------------------
 # Tool parameters
 # ------------------------------------------------------------------------------
@@ -109,9 +127,8 @@ C_INCLUDES = $(TGT_INCLUDES)                    \
              -I$(PATH_APP)                      \
              -I$(PATH_APP)/mcal/$(TGT)
 
-GCCFLAGS    = $(TGT_CFLAGS)                     \
-              -g                                \
-              -Wall                             \
+ifeq ($(WARN_FLAGS),)
+WARN_FLAGS =  -Wall                             \
               -Wextra                           \
               -pedantic                         \
               -Wmain                            \
@@ -128,24 +145,26 @@ GCCFLAGS    = $(TGT_CFLAGS)                     \
               -Wmissing-include-dirs            \
               -Winit-self                       \
               -Wfloat-equal                     \
-              -Wdouble-promotion                \
+              -Wdouble-promotion
+endif
+
+GCCFLAGS    = -g                                \
+              $(WARN_FLAGS)                     \
               -gdwarf-2                         \
               -fno-exceptions                   \
               -ffunction-sections               \
               -fdata-sections
 
 CFLAGS      = $(GCCFLAGS)                       \
-              -Wunsuffixed-float-constants      \
-              -x c                              \
-              -std=c99
+              $(TGT_CFLAGS)                     \
+              -x c
 
-CPPFLAGS    = $(GCCFLAGS)                       \
-              $(TGT_CPPFLAGS)                   \
+CXXFLAGS    = $(GCCFLAGS)                       \
+              $(TGT_CXXFLAGS)                   \
               -x c++                            \
               -fno-rtti                         \
-              -fstrict-enums                    \
               -fno-use-cxa-atexit               \
-              -fno-use-cxa-get-exception-ptr    \
+              -fno-exceptions                   \
               -fno-nonansi-builtins             \
               -fno-threadsafe-statics           \
               -fno-enforce-eh-specs             \
@@ -157,11 +176,9 @@ AFLAGS      = $(GCCFLAGS)                       \
               $(TGT_AFLAGS)                     \
               -x assembler
 
-LDFLAGS     = $(GCCFLAGS)                       \
+LDFLAGS     = $(CXXFLAGS)                       \
               $(TGT_LDFLAGS)                    \
-              -x none                           \
-              -Wl,--gc-sections                 \
-              -Wl,-Map,$(APP).map
+              -x none
 
 # ------------------------------------------------------------------------------
 # Main-Dependencies (app: all)
@@ -261,8 +278,19 @@ endif
 # ------------------------------------------------------------------------------
 $(APP)_flash.hex : $(APP).$(TGT_SUFFIX)
 	@-$(ECHO) +++ creating hex module: $(APP).hex.
-	@-$(OBJCOPY) -O ihex $(APP).$(TGT_SUFFIX) $(APP).hex
-	@-$(OBJCOPY) -S -O binary $(APP).$(TGT_SUFFIX) $(APP).bin
+	@-$(OBJCOPY) $(APP).$(TGT_SUFFIX) -O ihex $(APP).hex
+	@-$(OBJCOPY) $(APP).$(TGT_SUFFIX) -O binary $(APP).bin
+ifeq ($(RULE_SPECIAL_MAKE_IMAGE_FILE),)
+	@-$(ECHO) +++ creating binary file
+	@-$(OBJCOPY) $(APP).$(TGT_SUFFIX) -O binary $(IMAGE_FILE)
+else
+	@-$(ECHO) +++ creating special image file
+	@-$(RULE_SPECIAL_MAKE_IMAGE_FILE)
+endif
+ifneq ($(RULE_SPECIAL_MAKE_FLASH_BATCH),)
+	@-$(ECHO) +++ creating flash batch file
+	@-$(RULE_SPECIAL_MAKE_FLASH_BATCH)
+endif
 
 # ------------------------------------------------------------------------------
 # Dependencyfile include (build)
@@ -271,7 +299,7 @@ $(APP)_flash.hex : $(APP).$(TGT_SUFFIX)
 # If the files do not exist then the includes will be ignored.
 # ------------------------------------------------------------------------------
 ifneq ($(MAKECMDGOALS),rebuild)
--include $(subst .o,.d,$(FILES_O))       # for example tmp/obj/sys_start.d, tmp/obj/mcal_cpu.d, etc
+-include $(subst .o,.d,$(FILES_O))
 endif
 
 

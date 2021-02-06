@@ -89,12 +89,6 @@
     <Filter Include="src\mcal\rl78">
       <UniqueIdentifier>{f8af3f0f-5c80-41e7-88de-7809108140bd}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\util\STL\impl\arm">
-      <UniqueIdentifier>{9720414a-cb9d-4d52-b113-55909704ad88}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\util\STL\impl\rl78">
-      <UniqueIdentifier>{e5d40cb1-7138-45c2-a206-9124a2aa53ae}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\mcal\stm32f429">
       <UniqueIdentifier>{3d9c9058-7846-4b3f-b8aa-c64674ccacb1}</UniqueIdentifier>
     </Filter>
@@ -172,6 +166,15 @@
     </Filter>
     <Filter Include="src\math\wide_decimal">
       <UniqueIdentifier>{600114e0-a873-4e3b-8b5b-06844c801c31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\mcal\xtensa32\from_sdk">
+      <UniqueIdentifier>{9e3b9eeb-09b2-45f0-b1c6-5aca06d31d33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\mcal\xtensa32\from_sdk\soc">
+      <UniqueIdentifier>{734f412d-52b0-4aec-8bf0-f8a97565aac0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\mcal\atmega4809">
+      <UniqueIdentifier>{dbda4d0b-067f-4d70-82e7-06a6c5b83f6a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -271,9 +274,6 @@
     <ClCompile Include="src\mcal\stm32f407\mcal_wdg.cpp">
       <Filter>src\mcal\stm32f407</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\STL\impl\avr\avr_float_limits.cpp">
-      <Filter>src\util\STL\impl\avr</Filter>
-    </ClCompile>
     <ClCompile Include="src\util\STL\impl\cmath_impl_hyperbolic.cpp">
       <Filter>src\util\STL\impl</Filter>
     </ClCompile>
@@ -303,12 +303,6 @@
     </ClCompile>
     <ClCompile Include="src\mcal\rl78\mcal_wdg.cpp">
       <Filter>src\mcal\rl78</Filter>
-    </ClCompile>
-    <ClCompile Include="src\util\STL\impl\arm\arm_float_limits.cpp">
-      <Filter>src\util\STL\impl\arm</Filter>
-    </ClCompile>
-    <ClCompile Include="src\util\STL\impl\rl78\rl78_float_limits.cpp">
-      <Filter>src\util\STL\impl\rl78</Filter>
     </ClCompile>
     <ClCompile Include="src\mcal\stm32f429\mcal_cpu.cpp">
       <Filter>src\mcal\stm32f429</Filter>
@@ -752,6 +746,57 @@
       <Filter>src\util\STL\impl\avr</Filter>
     </ClCompile>
     <ClCompile Include="src\app\benchmark\app_benchmark_hash.cpp">
+      <Filter>src\app\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mcal\bcm2835_raspi_b\mcal_cpu_detail.cpp">
+      <Filter>src\mcal\bcm2835_raspi_b</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mcal\xtensa32\from_sdk\esp32-hal-gpio.c">
+      <Filter>src\mcal\xtensa32\from_sdk</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\benchmark\app_benchmark_wide_decimal.cpp">
+      <Filter>src\app\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\benchmark\app_benchmark_trapezoid_integral.cpp">
+      <Filter>src\app\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\benchmark\app_benchmark_pi_agm.cpp">
+      <Filter>src\app\benchmark</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mcal\atmega4809\mcal_osc.cpp">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mcal\atmega4809\mcal_port.cpp">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mcal\atmega4809\mcal_pwm.cpp">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mcal\atmega4809\mcal_spi.cpp">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mcal\atmega4809\mcal_wdg.cpp">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mcal\atmega4809\mcal_cpu.cpp">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mcal\atmega4809\mcal_eep.cpp">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mcal\atmega4809\mcal_gpt.cpp">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mcal\atmega4809\mcal_irq.cpp">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mcal\atmega4809\mcal_led.cpp">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClCompile>
+    <ClCompile Include="src\mcal\atmega4809\mcal_memory_sram.cpp">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClCompile>
+    <ClCompile Include="src\app\benchmark\app_benchmark_none.cpp">
       <Filter>src\app\benchmark</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1725,9 +1770,6 @@
     <ClInclude Include="src\mcal_lcd\mcal_lcd_base.h">
       <Filter>src\mcal_lcd</Filter>
     </ClInclude>
-    <ClInclude Include="src\mcal_lcd\mcal_lcd_classic_st7066.h">
-      <Filter>src\mcal_lcd</Filter>
-    </ClInclude>
     <ClInclude Include="src\mcal_led\mcal_led_port_inverted.h">
       <Filter>src\mcal_led</Filter>
     </ClInclude>
@@ -1766,6 +1808,90 @@
     </ClInclude>
     <ClInclude Include="src\math\wide_decimal\decwide_t_detail_fft.h">
       <Filter>src\math\wide_decimal</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\utility\util_baselexical_cast.h">
+      <Filter>src\util\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\xtensa32\from_sdk\esp32-hal-gpio.h">
+      <Filter>src\mcal\xtensa32\from_sdk</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\xtensa32\from_sdk\soc\gpio_struct.h">
+      <Filter>src\mcal\xtensa32\from_sdk\soc</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\utility\util_numeric_cast.h">
+      <Filter>src\util\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\atmega4809\mcal_memory_sram.h">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\atmega4809\mcal_memory_sram_parallel_cypress_cy62158e.h">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\atmega4809\mcal_memory_sram_parallel_cypress_cy62167gn.h">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\atmega4809\mcal_osc.h">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\atmega4809\mcal_port.h">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\atmega4809\mcal_port_expander_microchip_mcp23s17.h">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\atmega4809\mcal_port_pin_dummy.h">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\atmega4809\mcal_port_word.h">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\atmega4809\mcal_pwm.h">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\atmega4809\mcal_pwm_lcd.h">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\atmega4809\mcal_reg.h">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\atmega4809\mcal_ser.h">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\atmega4809\mcal_spi.h">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\atmega4809\mcal_wdg.h">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\atmega4809\mcal_benchmark.h">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\atmega4809\mcal_cpu.h">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\atmega4809\mcal_eep.h">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\atmega4809\mcal_gpt.h">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\atmega4809\mcal_irq.h">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\atmega4809\mcal_led.h">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal\atmega4809\mcal_memory_progmem.h">
+      <Filter>src\mcal\atmega4809</Filter>
+    </ClInclude>
+    <ClInclude Include="src\mcal_lcd\mcal_lcd_generic_st7066.h">
+      <Filter>src\mcal_lcd</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\STL\impl\alloc_traits.h">
+      <Filter>src\util\STL\impl</Filter>
+    </ClInclude>
+    <ClInclude Include="src\util\STL\impl\ptr_traits.h">
+      <Filter>src\util\STL\impl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1870,6 +1996,9 @@
     </None>
     <None Include="src\mcal\bcm2835_raspi_b\mcal_cpu_detail_secure.s">
       <Filter>src\mcal\bcm2835_raspi_b</Filter>
+    </None>
+    <None Include="src\app\benchmark\readme.md">
+      <Filter>src\app\benchmark</Filter>
     </None>
   </ItemGroup>
 </Project>

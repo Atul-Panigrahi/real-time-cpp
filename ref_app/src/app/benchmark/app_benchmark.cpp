@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-//  Copyright Christopher Kormanyos 2007 - 2020.
+//  Copyright Christopher Kormanyos 2007 - 2021.
 //  Distributed under the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt
 //  or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -25,11 +25,8 @@ namespace app
 
 void app::benchmark::task_init()
 {
-  #if(APP_BENCHMARK_TYPE == APP_BENCHMARK_TYPE_NONE)
-  #else
   // Set the benchmark port pin direction to output.
   port_type::set_direction_output();
-  #endif
 }
 
 void app::benchmark::task_func()
@@ -41,7 +38,7 @@ void app::benchmark::task_func()
 
   #if(APP_BENCHMARK_TYPE == APP_BENCHMARK_TYPE_NONE)
 
-  const bool result_is_ok = true;
+  const bool result_is_ok = app::benchmark::run_none();
 
   #elif(APP_BENCHMARK_TYPE == APP_BENCHMARK_TYPE_COMPLEX)
 
@@ -82,6 +79,18 @@ void app::benchmark::task_func()
   #elif(APP_BENCHMARK_TYPE == APP_BENCHMARK_TYPE_HASH)
 
   const bool result_is_ok = app::benchmark::run_hash();
+
+  #elif(APP_BENCHMARK_TYPE == APP_BENCHMARK_TYPE_WIDE_DECIMAL)
+
+  const bool result_is_ok = app::benchmark::run_wide_decimal();
+
+  #elif(APP_BENCHMARK_TYPE == APP_BENCHMARK_TYPE_TRAPEZOID_INTEGRAL)
+
+  const bool result_is_ok = app::benchmark::run_trapezoid_integral();
+
+  #elif(APP_BENCHMARK_TYPE == APP_BENCHMARK_TYPE_PI_AGM)
+
+  const bool result_is_ok = app::benchmark::run_pi_agm();
 
   #endif
 

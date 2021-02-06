@@ -154,6 +154,24 @@
     <Filter Include="micros\bcm2835_raspi_b\startup\SD_CARD\PiZero">
       <UniqueIdentifier>{a32f6b71-97b1-472a-8d7b-9e0ca74c54d6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="micros\xtensa32\make\from_sdk">
+      <UniqueIdentifier>{0780784d-8922-4ee4-9cba-c737e5c4b5d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\xtensa32\make\from_sdk\ld">
+      <UniqueIdentifier>{b64a703f-4f34-4ca9-96bd-ab8f1df822a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\stm32f446\_debug">
+      <UniqueIdentifier>{525b4cb4-536c-456d-a67e-8d3646defe56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\atmega4809">
+      <UniqueIdentifier>{ba6f4884-46c0-460d-b35f-1808a511a9b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\atmega4809\make">
+      <UniqueIdentifier>{f8caecdf-f828-4818-a57a-c7d1e6ff4883}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="micros\atmega4809\startup">
+      <UniqueIdentifier>{0ad7a31a-3074-4b6b-95c1-6cf6e46e58c1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="target\app\make\app_files.gmk">
@@ -282,9 +300,6 @@
     <None Include="target\micros\stm32f446\make\stm32f446_flags.gmk">
       <Filter>micros\stm32f446\make</Filter>
     </None>
-    <None Include="target\micros\xtensa32\make\xtensa32.ld">
-      <Filter>micros\xtensa32\make</Filter>
-    </None>
     <None Include="target\micros\xtensa32\make\xtensa32_files.gmk">
       <Filter>micros\xtensa32\make</Filter>
     </None>
@@ -329,6 +344,63 @@
     </None>
     <None Include="target\micros\bcm2835_raspi_b\startup\SD_CARD\PiZero\start.elf">
       <Filter>micros\bcm2835_raspi_b\startup\SD_CARD\PiZero</Filter>
+    </None>
+    <None Include="target\micros\xtensa32\startup\partitions.bin">
+      <Filter>micros\xtensa32\startup</Filter>
+    </None>
+    <None Include="target\micros\xtensa32\startup\partitions.csv">
+      <Filter>micros\xtensa32\startup</Filter>
+    </None>
+    <None Include="target\micros\xtensa32\startup\boot_app0.bin">
+      <Filter>micros\xtensa32\startup</Filter>
+    </None>
+    <None Include="target\micros\xtensa32\startup\bootloader_qio_80m.bin">
+      <Filter>micros\xtensa32\startup</Filter>
+    </None>
+    <None Include="target\build\test_app_benchmarks.sh">
+      <Filter>build</Filter>
+    </None>
+    <None Include="target\micros\xtensa32\make\from_sdk\ld\esp32.peripherals.ld">
+      <Filter>micros\xtensa32\make\from_sdk\ld</Filter>
+    </None>
+    <None Include="target\micros\xtensa32\make\from_sdk\ld\esp32.project.ld">
+      <Filter>micros\xtensa32\make\from_sdk\ld</Filter>
+    </None>
+    <None Include="target\micros\xtensa32\make\from_sdk\ld\esp32.rom.ld">
+      <Filter>micros\xtensa32\make\from_sdk\ld</Filter>
+    </None>
+    <None Include="target\micros\xtensa32\make\from_sdk\ld\esp32.rom.libgcc.ld">
+      <Filter>micros\xtensa32\make\from_sdk\ld</Filter>
+    </None>
+    <None Include="target\micros\xtensa32\make\from_sdk\ld\esp32.rom.spiram_incompatible_fns.ld">
+      <Filter>micros\xtensa32\make\from_sdk\ld</Filter>
+    </None>
+    <None Include="target\micros\xtensa32\make\from_sdk\ld\esp32_out.ld">
+      <Filter>micros\xtensa32\make\from_sdk\ld</Filter>
+    </None>
+    <None Include="target\micros\xtensa32\make\xtensa32.ld">
+      <Filter>micros\xtensa32\make</Filter>
+    </None>
+    <None Include="target\micros\stm32f446\_debug\stm32f446.jdebug">
+      <Filter>micros\stm32f446\_debug</Filter>
+    </None>
+    <None Include="target\micros\atmega4809\make\atmega4809_files.gmk">
+      <Filter>micros\atmega4809\make</Filter>
+    </None>
+    <None Include="target\micros\atmega4809\make\atmega4809_flags.gmk">
+      <Filter>micros\atmega4809\make</Filter>
+    </None>
+    <None Include="target\micros\atmega4809\make\atmega4809.ld">
+      <Filter>micros\atmega4809\make</Filter>
+    </None>
+    <None Include="target\micros\stm32f446\_debug\Cortex-M4F.svd">
+      <Filter>micros\stm32f446\_debug</Filter>
+    </None>
+    <None Include="target\build\test_app_benchmarks_avr.sh">
+      <Filter>build</Filter>
+    </None>
+    <None Include="target\build\test_app_benchmarks_stm32f446.sh">
+      <Filter>build</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -455,18 +527,6 @@
     <ClCompile Include="target\micros\stm32f446\startup\int_vect.cpp">
       <Filter>micros\stm32f446\startup</Filter>
     </ClCompile>
-    <ClCompile Include="target\micros\xtensa32\startup\crt0.cpp">
-      <Filter>micros\xtensa32\startup</Filter>
-    </ClCompile>
-    <ClCompile Include="target\micros\xtensa32\startup\crt0_init_ram.cpp">
-      <Filter>micros\xtensa32\startup</Filter>
-    </ClCompile>
-    <ClCompile Include="target\micros\xtensa32\startup\crt1.cpp">
-      <Filter>micros\xtensa32\startup</Filter>
-    </ClCompile>
-    <ClCompile Include="target\micros\xtensa32\startup\int_vect.cpp">
-      <Filter>micros\xtensa32\startup</Filter>
-    </ClCompile>
     <ClCompile Include="target\micros\lpc11c24\startup\crt0.cpp">
       <Filter>micros\lpc11c24\startup</Filter>
     </ClCompile>
@@ -490,6 +550,21 @@
     </ClCompile>
     <ClCompile Include="target\micros\stm32l100c\startup\int_vect.cpp">
       <Filter>micros\stm32l100c\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\xtensa32\startup\app_main.cpp">
+      <Filter>micros\xtensa32\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\atmega4809\startup\int_vect.cpp">
+      <Filter>micros\atmega4809\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\atmega4809\startup\crt0.cpp">
+      <Filter>micros\atmega4809\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\atmega4809\startup\crt0_init_ram.cpp">
+      <Filter>micros\atmega4809\startup</Filter>
+    </ClCompile>
+    <ClCompile Include="target\micros\atmega4809\startup\crt1.cpp">
+      <Filter>micros\atmega4809\startup</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
